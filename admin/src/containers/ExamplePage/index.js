@@ -60,9 +60,11 @@ export class ExamplePage extends React.Component {
               onChange={this.preAnalyzeImportFile}
             />
           </div>
+        </div>
 
-          {this.state.analysis && (
-            <div>
+        {this.state.analysis && (
+          <div className="row">
+            <div className="col-md-12">
               <div>Found {this.state.analysis.itemCount} items...</div>
               <table>
                 <tr>
@@ -85,8 +87,10 @@ export class ExamplePage extends React.Component {
                 ))}
               </table>
             </div>
-          )}
+          </div>
+        )}
 
+        <div className="row">
           <div className="col-md-12">
             <p>This is an example of a fake API call.</p>
             <p>Loading: {this.props.loading ? 'yes' : 'no'}.</p>
