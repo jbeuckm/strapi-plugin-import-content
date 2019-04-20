@@ -1,0 +1,22 @@
+{
+  "connection": "default",
+  "info": {
+    "name": "import",
+    "description": ""
+  },
+  "attributes": {
+    "username": {
+      "type": "string",
+      "minLength": 3,
+      "unique": true,
+      "configurable": false,
+      "required": true
+    },
+    "confirmed": {
+      "type": "boolean",
+      "default": false,
+      "configurable": false
+    }
+  },
+  "collectionName": "import_import"
+}

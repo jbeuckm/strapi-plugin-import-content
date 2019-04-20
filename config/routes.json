@@ -1,0 +1,20 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/",
+      "handler": "Import.index",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/preAnalyzeImportFile",
+      "handler": "Import.preAnalyzeImportFile",
+      "config": {
+        "policies": []
+      }
+    }
+  ]
+}
