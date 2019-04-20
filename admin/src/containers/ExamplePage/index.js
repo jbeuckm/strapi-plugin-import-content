@@ -7,6 +7,7 @@ import { compose } from 'redux';
 import pluginId from 'pluginId';
 
 import Button from 'components/Button';
+import PluginHeader from 'components/PluginHeader';
 
 import styles from './styles.scss';
 import { loadData } from './actions';
@@ -24,17 +25,8 @@ export class ExamplePage extends React.Component {
     const url = event.target.value;
     const response = await fetch(`/import/preAnalyzeImportFile?url=${url}`);
     const json = await response.json();
-    console.log({ json });
 
     this.setState({ analysis: json });
-    // .then(function(response) {
-    //   console.log(response.json());
-    //   this.setState({ analysis: response.json() });
-    // })
-    // .then(function(myJson) {
-    //   console.log(JSON.stringify(myJson));
-    // })
-    // .catch(console.log);
   };
 
   generateDataBlock() {
@@ -51,15 +43,15 @@ export class ExamplePage extends React.Component {
   }
 
   render() {
-    console.log(this.state);
-    console.log(
-      'Don\'t forget to delete the ExampleContainer when you\'re done studying it'
-    );
-    // Generate the data block
     const dataBlock = this.generateDataBlock();
 
     return (
       <div className={styles.examplePage}>
+        <PluginHeader
+          title={'Import Content'}
+          description={'Import content from an RSS feed.'}
+        />
+
         <div className="row">
           <div className="col-md-12">
             Import from this URL:
@@ -94,7 +86,6 @@ export class ExamplePage extends React.Component {
               </table>
             </div>
           )}
-          <div>{JSON.stringify(this.state.analysis)}</div>
 
           <div className="col-md-12">
             <p>This is an example of a fake API call.</p>
