@@ -24,12 +24,10 @@ module.exports = {
 
   preAnalyzeImportFile: async ctx => {
     console.log(ctx.query);
-    await strapi.plugins.import.services.import.preAnalyzeImportFile(
+    const data = await strapi.plugins.import.services.import.preAnalyzeImportFile(
       ctx.query.url
     );
 
-    ctx.send({
-      message: 'ok'
-    });
+    ctx.send(data);
   }
 };

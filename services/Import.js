@@ -1,5 +1,6 @@
 'use strict';
 const request = require('request');
+const contentTypeParser = require('content-type-parser');
 
 /**
  * Import.js service
@@ -8,12 +9,20 @@ const request = require('request');
  */
 
 module.exports = {
-  preAnalyzeImportFile: url => {
-    request(url, null, (err, res, body) => {
-      if (err) {
-        return console.log(err);
-      }
-      console.log(body);
-    });
-  }
+  preAnalyzeImportFile: url =>
+    new Promise((resolve, reject) => {
+      request(url, null, (err, res, body) => {
+        if (err) {
+          reject(err);
+        }
+        console.log(Object.keys(res));
+
+        const contentType = contentTypeParser(res.headers['content-type']);
+        console.log(contentType.type, contentType.subtype);
+
+        resolve({
+          contentType
+        });
+      });
+    })
 };
