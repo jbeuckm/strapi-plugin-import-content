@@ -1,11 +1,11 @@
 {
   "name": "strapi-plugin-import",
   "version": "0.0.0",
-  "description": "This is the description of the plugin.",
+  "description": "Import RSS etc. into Strapi.",
   "strapi": {
     "name": "import",
     "icon": "plug",
-    "description": "Description of import plugin."
+    "description": "Import RSS etc. into Strapi."
   },
   "scripts": {
     "analyze:clean": "node ./node_modules/strapi-helper-plugin/node_modules/.bin/rimraf stats.json",
@@ -24,20 +24,22 @@
   },
   "dependencies": {
     "content-type-parser": "^1.0.2",
-    "request": "^2.88.0"
+    "request": "^2.88.0",
+    "rss-parser": "^3.7.0",
+    "simple-statistics": "^7.0.2"
   },
   "devDependencies": {
     "strapi-helper-plugin": "3.0.0-alpha.26"
   },
   "author": {
-    "name": "A Strapi developer",
-    "email": "",
+    "name": "Joseph Beuckman",
+    "email": "joe@beigerecords.com",
     "url": ""
   },
   "maintainers": [
     {
-      "name": "A Strapi developer",
-      "email": "",
+      "name": "Joseph Beuckman",
+      "email": "joe@beigerecords.com",
       "url": ""
     }
   ],

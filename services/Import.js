@@ -11,18 +11,25 @@ const contentTypeParser = require('content-type-parser');
 module.exports = {
   preAnalyzeImportFile: url =>
     new Promise((resolve, reject) => {
-      request(url, null, (err, res, body) => {
+      request(url, null, async (err, res, body) => {
         if (err) {
           reject(err);
         }
-        console.log(Object.keys(res));
 
         const contentType = contentTypeParser(res.headers['content-type']);
-        console.log(contentType.type, contentType.subtype);
 
-        resolve({
-          contentType
-        });
+        if (contentType.isXML()) {
+          const result = await strapi.plugins['import'].services[
+            'analyzexml'
+          ].analyze(body);
+
+          resolve({ status: 'success', sourceType: 'rss', ...result });
+        } else {
+          resolve({
+            status: 'unknown type',
+            contentType: contentType.toString()
+          });
+        }
       });
     })
 };

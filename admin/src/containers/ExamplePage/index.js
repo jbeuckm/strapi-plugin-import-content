@@ -15,16 +15,26 @@ import reducer from './reducer';
 import saga from './saga';
 
 export class ExamplePage extends React.Component {
-  preAnalyzeImportFile = event => {
+  constructor(props) {
+    super(props);
+    this.state = { analysis: null };
+  }
+
+  preAnalyzeImportFile = async event => {
     const url = event.target.value;
-    fetch(`/import/preAnalyzeImportFile?url=${url}`)
-      .then(function(response) {
-        return response.json();
-      })
-      .then(function(myJson) {
-        console.log(JSON.stringify(myJson));
-      })
-      .catch(console.log);
+    const response = await fetch(`/import/preAnalyzeImportFile?url=${url}`);
+    const json = await response.json();
+    console.log({ json });
+
+    this.setState({ analysis: json });
+    // .then(function(response) {
+    //   console.log(response.json());
+    //   this.setState({ analysis: response.json() });
+    // })
+    // .then(function(myJson) {
+    //   console.log(JSON.stringify(myJson));
+    // })
+    // .catch(console.log);
   };
 
   generateDataBlock() {
@@ -41,6 +51,7 @@ export class ExamplePage extends React.Component {
   }
 
   render() {
+    console.log(this.state);
     console.log(
       'Don\'t forget to delete the ExampleContainer when you\'re done studying it'
     );
@@ -57,6 +68,33 @@ export class ExamplePage extends React.Component {
               onChange={this.preAnalyzeImportFile}
             />
           </div>
+
+          {this.state.analysis && (
+            <div>
+              <div>Found {this.state.analysis.itemCount} items...</div>
+              <table>
+                <tr>
+                  <th>Field Name</th>
+                  <th>Count</th>
+                  <th>Format</th>
+                  <th>Min Length</th>
+                  <th>Max Length</th>
+                  <th>Avg Length</th>
+                </tr>
+                {this.state.analysis.fieldStats.map((stat, index) => (
+                  <tr>
+                    <td>{stat.fieldName}</td>
+                    <td>{stat.count}</td>
+                    <td>{stat.format}</td>
+                    <td>{stat.minLength}</td>
+                    <td>{stat.maxLength}</td>
+                    <td>{stat.meanLength}</td>
+                  </tr>
+                ))}
+              </table>
+            </div>
+          )}
+          <div>{JSON.stringify(this.state.analysis)}</div>
 
           <div className="col-md-12">
             <p>This is an example of a fake API call.</p>
