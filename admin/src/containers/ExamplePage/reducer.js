@@ -26,10 +26,10 @@ function examplePageReducer(state = initialState, action) {
       return state.set('loading', true);
 
     case LOAD_MODELS_SUCCESS:
-      return state.set('loading', false).set('models', fromJS(payload.models));
+      return state.set('loading', false).set('models', payload.models);
 
     case LOAD_MODELS_ERROR:
-      return state.set('loading', false).set('error', fromJS(payload));
+      return state.set('loading', false).set('error', payload);
 
     default:
       return state;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -15,10 +15,10 @@ import { makeSelectLoading, makeSelectModels } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 
-export class ExamplePage extends React.Component {
+export class ExamplePage extends Component {
   constructor(props) {
     super(props);
-    this.state = { models: null, analysis: null };
+    this.state = { models: null, analysis: null, loadingAnalysis: false };
 
     props.loadModels();
   }
@@ -32,15 +32,19 @@ export class ExamplePage extends React.Component {
 
   preAnalyzeImportFile = async event => {
     const url = event.target.value;
+
+    this.setState({ loadingAnalysis: true });
     const response = await fetch(`/import/preAnalyzeImportFile?url=${url}`);
     const json = await response.json();
+    this.setState({ loadingAnalysis: false });
 
     this.setState({ analysis: json });
   };
 
   render() {
     const { models, loading } = this.props;
-    const { analysis } = this.state;
+    console.log(models);
+    const { loadingAnalysis, analysis } = this.state;
 
     return (
       <div className={styles.examplePage}>
@@ -55,9 +59,28 @@ export class ExamplePage extends React.Component {
             <input
               className={styles.urlInput}
               onChange={this.preAnalyzeImportFile}
+              disabled={loadingAnalysis}
             />
+            {loadingAnalysis && <p>Loading...</p>}
           </div>
-          {loading ? <p>loading...</p> : null}
+        </div>
+
+        <div className="row">
+          <div className="col-md-12">
+            {loading && <p>Loading content types...</p>}
+            {models && (
+              <Fragment>
+                <span>Import to content of this type:</span>
+                <select onChange={this.selectContentType}>
+                  {models
+                    .filter(
+                      model => !['import', 'importeditem'].includes(model.name)
+                    )
+                    .map(model => <option>{model.name}</option>)}
+                </select>
+              </Fragment>
+            )}
+          </div>
         </div>
 
         {analysis && (

@@ -17,7 +17,7 @@ export function* loadModels() {
     const { allModels } = yield call(request, '/content-type-builder/models', {
       method: 'GET'
     });
-
+    console.log({ allModels });
     yield put(loadModelsSuccess(allModels));
   } catch (err) {
     strapi.notification.error('notification.error');
