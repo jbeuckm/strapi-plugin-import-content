@@ -1,6 +1,6 @@
 /*
  *
- * ExamplePage reducer
+ * createImportPage reducer
  *
  */
 
@@ -18,7 +18,7 @@ const initialState = fromJS({
   error: null
 });
 
-function examplePageReducer(state = initialState, action) {
+function createImportPageReducer(state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
@@ -36,4 +36,4 @@ function examplePageReducer(state = initialState, action) {
   }
 }
 
-export default examplePageReducer;
+export default createImportPageReducer;

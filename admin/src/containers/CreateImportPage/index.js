@@ -15,7 +15,7 @@ import { makeSelectLoading, makeSelectModels } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 
-export class ExamplePage extends Component {
+export class CreateImportPage extends Component {
   constructor(props) {
     super(props);
     this.state = { models: null, analysis: null, loadingAnalysis: false };
@@ -43,11 +43,10 @@ export class ExamplePage extends Component {
 
   render() {
     const { models, loading } = this.props;
-    console.log(models);
     const { loadingAnalysis, analysis } = this.state;
 
     return (
-      <div className={styles.examplePage}>
+      <div className={styles.createImportPage}>
         <PluginHeader
           title={'Import Content'}
           description={'Import content from an RSS feed.'}
@@ -126,11 +125,11 @@ export class ExamplePage extends Component {
   }
 }
 
-ExamplePage.contextTypes = {
+CreateImportPage.contextTypes = {
   router: PropTypes.object
 };
 
-ExamplePage.propTypes = {
+CreateImportPage.propTypes = {
   models: PropTypes.object.isRequired,
   loadModels: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired
@@ -151,14 +150,14 @@ const withConnect = connect(
 );
 
 const withReducer = strapi.injectReducer({
-  key: 'examplePage',
+  key: 'createImportPage',
   reducer,
   pluginId
 });
-const withSaga = strapi.injectSaga({ key: 'examplePage', saga, pluginId });
+const withSaga = strapi.injectSaga({ key: 'createImportPage', saga, pluginId });
 
 export default compose(
   withReducer,
   withSaga,
   withConnect
-)(injectIntl(ExamplePage));
+)(injectIntl(CreateImportPage));

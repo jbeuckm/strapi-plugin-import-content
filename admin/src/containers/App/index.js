@@ -12,21 +12,17 @@ import { createStructuredSelector } from 'reselect';
 import { Switch, Route } from 'react-router-dom';
 import { compose } from 'redux';
 
-// Utils
 import pluginId from 'pluginId';
 
-// Containers
 import HomePage from 'containers/HomePage';
 import NotFoundPage from 'containers/NotFoundPage';
-// When you're done studying the ExamplePage container, remove the following line and delete the ExamplePage container
-import ExamplePage from 'containers/ExamplePage';
+import CreateImportPage from 'containers/CreateImportPage';
 
 import reducer from './reducer';
 
 class App extends React.Component {
-  // When you're done studying the ExamplePage container, remove the following lines and delete the ExamplePage container
   componentDidMount() {
-    this.props.history.push(`/plugins/${pluginId}/example`);
+    this.props.history.push(`/plugins/${pluginId}/create`);
   }
 
   render() {
@@ -34,10 +30,9 @@ class App extends React.Component {
       <div className={pluginId}>
         <Switch>
           <Route path={`/plugins/${pluginId}`} component={HomePage} exact />
-          {/* When you're done studying the ExamplePage container, remove the following line and delete the ExamplePage container  */}
           <Route
-            path={`/plugins/${pluginId}/example`}
-            component={ExamplePage}
+            path={`/plugins/${pluginId}/create`}
+            component={CreateImportPage}
             exact
           />
           <Route component={NotFoundPage} />
