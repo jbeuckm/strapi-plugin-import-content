@@ -8,6 +8,7 @@ import pluginId from 'pluginId';
 
 import Button from 'components/Button';
 import PluginHeader from 'components/PluginHeader';
+import MappingTable from '../../components/MappingTable';
 
 import styles from './styles.scss';
 import { loadModels } from './actions';
@@ -18,7 +19,12 @@ import saga from './saga';
 export class CreateImportPage extends Component {
   constructor(props) {
     super(props);
-    this.state = { models: null, analysis: null, loadingAnalysis: false };
+    this.state = {
+      models: null,
+      analysis: null,
+      loadingAnalysis: false,
+      selectedModel: null
+    };
 
     props.loadModels();
   }
@@ -39,6 +45,18 @@ export class CreateImportPage extends Component {
     this.setState({ loadingAnalysis: false });
 
     this.setState({ analysis: json });
+  };
+
+  selectContentType = event => {
+    const selectedName = event.target.value;
+    this.setState({ selectedName });
+  };
+
+  getTargetModel = () => {
+    const { models } = this.props;
+    if (!models) return null;
+
+    return models.find(model => model.name === this.state.selectedName);
   };
 
   render() {
@@ -83,31 +101,10 @@ export class CreateImportPage extends Component {
         </div>
 
         {analysis && (
-          <div className="row">
-            <div className="col-md-12">
-              <div>Found {analysis.itemCount} items...</div>
-              <table>
-                <tr>
-                  <th>Field Name</th>
-                  <th>Count</th>
-                  <th>Format</th>
-                  <th>Min Length</th>
-                  <th>Max Length</th>
-                  <th>Avg Length</th>
-                </tr>
-                {analysis.fieldStats.map(stat => (
-                  <tr>
-                    <td>{stat.fieldName}</td>
-                    <td>{stat.count}</td>
-                    <td>{stat.format}</td>
-                    <td>{stat.minLength}</td>
-                    <td>{stat.maxLength}</td>
-                    <td>{stat.meanLength}</td>
-                  </tr>
-                ))}
-              </table>
-            </div>
-          </div>
+          <MappingTable
+            analysis={analysis}
+            targetModel={this.getTargetModel()}
+          />
         )}
 
         <div className="row">
