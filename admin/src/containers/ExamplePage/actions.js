@@ -1,20 +1,18 @@
-/*
- *
- * ExamplePage actions
- *
- */
+import {
+  LOAD_MODELS,
+  LOAD_MODELS_SUCCESS,
+  LOAD_MODELS_ERROR
+} from './constants';
 
-import { LOAD_DATA, LOADED_DATA } from './constants';
-
-export function loadData() {
-  return {
-    type: LOAD_DATA
-  };
-}
-
-export function loadedData(data) {
-  return {
-    type: LOADED_DATA,
-    data
-  };
-}
+export const loadModels = () => ({
+  type: LOAD_MODELS
+});
+export const loadModelsSuccess = models => ({
+  type: LOAD_MODELS_SUCCESS,
+  payload: { models }
+});
+export const loadModelsError = error => ({
+  type: LOAD_MODELS_ERROR,
+  error: true,
+  payload: error
+});

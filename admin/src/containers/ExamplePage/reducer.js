@@ -6,19 +6,31 @@
 
 import { fromJS } from 'immutable';
 
-import { LOAD_DATA, LOADED_DATA } from './constants';
+import {
+  LOAD_MODELS,
+  LOAD_MODELS_SUCCESS,
+  LOAD_MODELS_ERROR
+} from './constants';
 
 const initialState = fromJS({
   loading: false,
-  data: false,
+  models: null,
+  error: null
 });
 
 function examplePageReducer(state = initialState, action) {
-  switch (action.type) {
-    case LOAD_DATA:
+  const { type, payload } = action;
+
+  switch (type) {
+    case LOAD_MODELS:
       return state.set('loading', true);
-    case LOADED_DATA:
-      return state.set('loading', false).set('data', fromJS(action.data));
+
+    case LOAD_MODELS_SUCCESS:
+      return state.set('loading', false).set('models', fromJS(payload.models));
+
+    case LOAD_MODELS_ERROR:
+      return state.set('loading', false).set('error', fromJS(payload));
+
     default:
       return state;
   }

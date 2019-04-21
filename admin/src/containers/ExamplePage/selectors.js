@@ -4,22 +4,19 @@ import pluginId from 'pluginId';
 /**
  * Direct selector to the examplePage state domain
  */
-const selectExamplePageDomain = () => state => state.get(`${pluginId}_examplePage`);
+const selectExamplePageDomain = () => state =>
+  state.get(`${pluginId}_examplePage`);
 
 /**
  * Default selector used by HomePage
  */
 
 const makeSelectLoading = () =>
-  createSelector(
-    selectExamplePageDomain(),
-    substate => substate.get('loading'),
+  createSelector(selectExamplePageDomain(), substate =>
+    substate.get('loading')
   );
 
-const makeSelectData = () =>
-  createSelector(
-    selectExamplePageDomain(),
-    substate => substate.get('data'),
-  );
+const makeSelectModels = () =>
+  createSelector(selectExamplePageDomain(), substate => substate.get('models'));
 
-export { makeSelectLoading, makeSelectData };
+export { makeSelectLoading, makeSelectModels };

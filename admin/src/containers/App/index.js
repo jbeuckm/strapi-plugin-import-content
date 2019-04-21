@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Switch, Route } from 'react-router-dom';
-import { bindActionCreators, compose } from 'redux';
+import { compose } from 'redux';
 
 // Utils
 import pluginId from 'pluginId';
@@ -35,7 +35,11 @@ class App extends React.Component {
         <Switch>
           <Route path={`/plugins/${pluginId}`} component={HomePage} exact />
           {/* When you're done studying the ExamplePage container, remove the following line and delete the ExamplePage container  */}
-          <Route path={`/plugins/${pluginId}/example`} component={ExamplePage} exact />
+          <Route
+            path={`/plugins/${pluginId}/example`}
+            component={ExamplePage}
+            exact
+          />
           <Route component={NotFoundPage} />
         </Switch>
       </div>
@@ -45,27 +49,19 @@ class App extends React.Component {
 
 App.contextTypes = {
   plugins: PropTypes.object,
-  updatePlugin: PropTypes.func,
+  updatePlugin: PropTypes.func
 };
 
 App.propTypes = {
-  history: PropTypes.object.isRequired,
+  history: PropTypes.object.isRequired
 };
-
-export function mapDispatchToProps(dispatch) {
-  return bindActionCreators(
-    {},
-    dispatch,
-  );
-}
 
 const mapStateToProps = createStructuredSelector({});
 
-// Wrap the component to inject dispatch and state into it
-const withConnect = connect(mapStateToProps, mapDispatchToProps);
+const withConnect = connect(mapStateToProps);
 const withReducer = strapi.injectReducer({ key: 'global', reducer, pluginId });
 
 export default compose(
   withReducer,
-  withConnect,
+  withConnect
 )(App);

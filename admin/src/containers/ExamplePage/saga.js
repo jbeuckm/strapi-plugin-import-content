@@ -1,30 +1,37 @@
-import { LOCATION_CHANGE } from 'react-router-redux';
-import { takeLatest, put, fork, take, cancel } from 'redux-saga/effects';
+import {
+  all,
+  fork,
+  takeLatest,
+  call,
+  put,
+  take,
+  cancel
+} from 'redux-saga/effects';
+import request from 'utils/request';
 
-import { loadedData } from './actions';
-import { LOAD_DATA } from './constants';
+import { loadModelsSuccess, loadModelsError } from './actions';
+import { LOAD_MODELS } from './constants';
 
-export function* loadData() {
-  // Fake API request delay
-  yield new Promise(resolve => {
-    setTimeout(() => {
-      resolve();
-    }, 1000);
-  });
+export function* loadModels() {
+  try {
+    const { allModels } = yield call(request, '/content-type-builder/models', {
+      method: 'GET'
+    });
 
-  // Generate a random array
-  const data = Array(4).fill(0).map(() => Math.floor(Math.random() * 100));
-
-  yield put(loadedData(data));
+    yield put(loadModelsSuccess(allModels));
+  } catch (err) {
+    strapi.notification.error('notification.error');
+    yield put(loadModelsError(err));
+  }
 }
 
 // Individual exports for testing
 export function* defaultSaga() {
-  const loadDataWatcher = yield fork(takeLatest, LOAD_DATA, loadData);
+  const loadModelsWatcher = yield fork(takeLatest, LOAD_MODELS, loadModels);
 
   // Suspend execution until location changes
-  yield take(LOCATION_CHANGE);
-  yield cancel(loadDataWatcher);
+  //  yield take(LOCATION_CHANGE);
+  //  yield cancel(loadModelsWatcher);
 }
 
 // All sagas to be loaded

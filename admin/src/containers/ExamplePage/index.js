@@ -10,16 +10,25 @@ import Button from 'components/Button';
 import PluginHeader from 'components/PluginHeader';
 
 import styles from './styles.scss';
-import { loadData } from './actions';
-import { makeSelectLoading, makeSelectData } from './selectors';
+import { loadModels } from './actions';
+import { makeSelectLoading, makeSelectModels } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 
 export class ExamplePage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { analysis: null };
+    this.state = { models: null, analysis: null };
+
+    props.loadModels();
   }
+
+  getModels = async () => {
+    const response = await fetch('/content-type-builder/models');
+    const json = await response.json();
+
+    this.setState({ models: json });
+  };
 
   preAnalyzeImportFile = async event => {
     const url = event.target.value;
@@ -29,21 +38,9 @@ export class ExamplePage extends React.Component {
     this.setState({ analysis: json });
   };
 
-  generateDataBlock() {
-    if (this.props.data) {
-      const items = this.props.data.map((item, i) => <li key={i}>{item}</li>);
-      return (
-        <div>
-          <p>Data:</p>
-          <ul>{items}</ul>
-        </div>
-      );
-    }
-    return;
-  }
-
   render() {
-    const dataBlock = this.generateDataBlock();
+    const { models, loading } = this.props;
+    const { analysis } = this.state;
 
     return (
       <div className={styles.examplePage}>
@@ -60,12 +57,13 @@ export class ExamplePage extends React.Component {
               onChange={this.preAnalyzeImportFile}
             />
           </div>
+          {loading ? <p>loading...</p> : null}
         </div>
 
-        {this.state.analysis && (
+        {analysis && (
           <div className="row">
             <div className="col-md-12">
-              <div>Found {this.state.analysis.itemCount} items...</div>
+              <div>Found {analysis.itemCount} items...</div>
               <table>
                 <tr>
                   <th>Field Name</th>
@@ -75,7 +73,7 @@ export class ExamplePage extends React.Component {
                   <th>Max Length</th>
                   <th>Avg Length</th>
                 </tr>
-                {this.state.analysis.fieldStats.map((stat, index) => (
+                {analysis.fieldStats.map(stat => (
                   <tr>
                     <td>{stat.fieldName}</td>
                     <td>{stat.count}</td>
@@ -92,12 +90,9 @@ export class ExamplePage extends React.Component {
 
         <div className="row">
           <div className="col-md-12">
-            <p>This is an example of a fake API call.</p>
-            <p>Loading: {this.props.loading ? 'yes' : 'no'}.</p>
-            {dataBlock}
             <Button
-              label={this.props.loading ? 'Loading...' : 'Submit'}
-              disabled={this.props.loading}
+              label={loading ? 'Loading...' : 'Submit'}
+              disabled={loading}
               onClick={this.props.loadData}
               primary
             />
@@ -113,18 +108,18 @@ ExamplePage.contextTypes = {
 };
 
 ExamplePage.propTypes = {
-  data: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]).isRequired,
-  loadData: PropTypes.func.isRequired,
+  models: PropTypes.object.isRequired,
+  loadModels: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired
 };
 
 const mapDispatchToProps = {
-  loadData
+  loadModels
 };
 
 const mapStateToProps = createStructuredSelector({
   loading: makeSelectLoading(),
-  data: makeSelectData()
+  models: makeSelectModels()
 });
 
 const withConnect = connect(
