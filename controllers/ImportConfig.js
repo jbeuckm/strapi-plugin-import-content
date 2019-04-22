@@ -22,6 +22,18 @@ module.exports = {
     ctx.send(entry);
   },
 
+  delete: async ctx => {
+    const importId = ctx.params.importId;
+
+    await strapi.plugins['import-content'].models['importconfig']
+      .forge({
+        id: importId
+      })
+      .destroy();
+
+    ctx.send({ message: 'ok' });
+  },
+
   preAnalyzeImportFile: async ctx => {
     const data = await strapi.plugins['import-content'].services[
       'importconfig'

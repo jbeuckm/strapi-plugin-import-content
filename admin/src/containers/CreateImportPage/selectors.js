@@ -21,4 +21,19 @@ const makeSelectModels = () =>
     substate.get('models')
   );
 
-export { makeSelectLoading, makeSelectModels };
+const makeSelectCreated = () =>
+  createSelector(selectCreateImportPageDomain(), substate =>
+    substate.get('created')
+  );
+
+const makeSelectSaving = () =>
+  createSelector(selectCreateImportPageDomain(), substate =>
+    substate.get('saving')
+  );
+
+export {
+  makeSelectLoading,
+  makeSelectModels,
+  makeSelectCreated,
+  makeSelectSaving
+};

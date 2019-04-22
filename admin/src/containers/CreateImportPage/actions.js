@@ -24,9 +24,9 @@ export const saveImportConfig = importConfig => ({
   type: SAVE_IMPORT_CONFIG,
   payload: { importConfig }
 });
-export const saveImportConfigSuccess = models => ({
+export const saveImportConfigSuccess = saved => ({
   type: SAVE_IMPORT_CONFIG_SUCCESS,
-  payload: { models }
+  payload: { saved }
 });
 export const saveImportConfigError = error => ({
   type: SAVE_IMPORT_CONFIG_ERROR,

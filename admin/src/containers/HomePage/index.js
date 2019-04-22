@@ -15,7 +15,7 @@ import {
 
 import styles from './styles.scss';
 
-import { loadImportConfigs } from './actions';
+import { loadImportConfigs, deleteImport } from './actions';
 import reducer from './reducer';
 import saga from './saga';
 
@@ -26,6 +26,11 @@ export class HomePage extends Component {
 
   navigateToCreateImport = () => {
     this.props.history.push(`/plugins/${pluginId}/create`);
+  };
+
+  deleteImport = id => () => {
+    console.log('delete', id);
+    this.props.deleteImport(id);
   };
 
   render() {
@@ -45,15 +50,23 @@ export class HomePage extends Component {
               <td>ID</td>
               <td>Created</td>
               <td>URL</td>
+              <td>Progress</td>
             </tr>
           </thead>
           <tbody>
             {importConfigs &&
               importConfigs.map(item => (
-                <tr>
+                <tr className={item.inProgress ? styles.inProgress : null}>
                   <td>{item.id}</td>
                   <td>{item.created_at}</td>
                   <td>{item.url}</td>
+                  <td>{item.progress}</td>
+                  <td>
+                    <Button
+                      label="delete"
+                      onClick={this.deleteImport(item.id)}
+                    />
+                  </td>
                 </tr>
               ))}
           </tbody>
@@ -70,11 +83,13 @@ HomePage.contextTypes = {
 HomePage.propTypes = {
   history: PropTypes.object.isRequired,
   loadImports: PropTypes.func.isRequired,
-  importConfigs: PropTypes.array
+  importConfigs: PropTypes.array,
+  deleteImport: PropTypes.func.isRequired
 };
 
 const mapDispatchToProps = {
-  loadImportConfigs
+  loadImportConfigs,
+  deleteImport
 };
 
 const mapStateToProps = createStructuredSelector({

@@ -18,7 +18,10 @@ import {
 const initialState = fromJS({
   loading: false,
   models: null,
-  error: null
+  error: null,
+  saving: false,
+  created: null,
+  saveError: null
 });
 
 function createImportPageReducer(state = initialState, action) {
@@ -39,8 +42,15 @@ function createImportPageReducer(state = initialState, action) {
       return state.set('loading', false).set('error', payload);
 
     case SAVE_IMPORT_CONFIG:
-    case SAVE_IMPORT_CONFIG_SUCCESS:
+      return state.set('saving', true);
+
+    case SAVE_IMPORT_CONFIG_SUCCESS: {
+      console.log(payload);
+      return state.set('saving', false).set('created', payload.saved);
+    }
+
     case SAVE_IMPORT_CONFIG_ERROR:
+      return state.set('loading', false).set('saveError', payload);
 
     default:
       return state;

@@ -1,12 +1,4 @@
-import {
-  all,
-  fork,
-  takeLatest,
-  call,
-  put,
-  take,
-  cancel
-} from 'redux-saga/effects';
+import { fork, takeLatest, call, put } from 'redux-saga/effects';
 import request from 'utils/request';
 
 import {
@@ -34,12 +26,12 @@ export function* saveImportConfig(event) {
   try {
     const { importConfig } = event.payload;
 
-    yield call(request, '/import-content', {
+    const saved = yield call(request, '/import-content', {
       method: 'POST',
       body: importConfig
     });
 
-    yield put(saveImportConfigSuccess());
+    yield put(saveImportConfigSuccess(saved));
   } catch (error) {
     strapi.notification.error('notification.error');
     yield put(saveImportConfigError(error));

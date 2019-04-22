@@ -12,7 +12,12 @@ import MappingTable from '../../components/MappingTable';
 
 import styles from './styles.scss';
 import { loadModels, saveImportConfig } from './actions';
-import { makeSelectLoading, makeSelectModels } from './selectors';
+import {
+  makeSelectLoading,
+  makeSelectModels,
+  makeSelectCreated,
+  makeSelectSaving
+} from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 
@@ -34,20 +39,22 @@ export class CreateImportPage extends Component {
     if (!this.props.models && nextProps.models) {
       this.setState({ selectedName: nextProps.models[0].name });
     }
+    if (!this.props.created && nextProps.created) {
+      this.props.history.push(`/plugins/${pluginId}`);
+    }
   }
 
   preAnalyzeImportFile = async event => {
     const url = event.target.value;
 
-    this.setState({ loadingAnalysis: true });
+    this.setState({ fieldMapping: {}, loadingAnalysis: true });
     const response = await fetch(
       `/import-content/preAnalyzeImportFile?url=${url}`
     );
 
     const json = await response.json();
 
-    this.setState({ loadingAnalysis: false });
-    this.setState({ url, analysis: json });
+    this.setState({ loadingAnalysis: false, url, analysis: json });
   };
 
   selectContentType = event => {
@@ -76,8 +83,10 @@ export class CreateImportPage extends Component {
   };
 
   render() {
-    const { models, loading } = this.props;
-    const { loadingAnalysis, analysis } = this.state;
+    const { models, loading, saving } = this.props;
+    const { loadingAnalysis, analysis, fieldMapping } = this.state;
+
+    const saveDisabled = loading || saving || fieldMapping === {};
 
     return (
       <div className={styles.createImportPage}>
@@ -126,7 +135,7 @@ export class CreateImportPage extends Component {
           <div className="col-md-12">
             <Button
               label={loading ? 'Loading...' : 'Import'}
-              disabled={loading}
+              disabled={saveDisabled}
               onClick={this.onSaveImport}
               primary
             />
@@ -144,7 +153,9 @@ CreateImportPage.contextTypes = {
 CreateImportPage.propTypes = {
   models: PropTypes.object.isRequired,
   loadModels: PropTypes.func.isRequired,
-  loading: PropTypes.bool.isRequired
+  loading: PropTypes.bool.isRequired,
+  saving: PropTypes.bool.isRequired,
+  created: PropTypes.object.isRequired
 };
 
 const mapDispatchToProps = {
@@ -154,7 +165,9 @@ const mapDispatchToProps = {
 
 const mapStateToProps = createStructuredSelector({
   loading: makeSelectLoading(),
-  models: makeSelectModels()
+  models: makeSelectModels(),
+  created: makeSelectCreated(),
+  saving: makeSelectSaving()
 });
 
 const withConnect = connect(

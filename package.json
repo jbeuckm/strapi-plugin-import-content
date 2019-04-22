@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "content-type-parser": "^1.0.2",
+    "moment": "^2.24.0",
     "request": "^2.88.0",
     "rss-parser": "^3.7.0",
     "simple-statistics": "^7.0.2"
