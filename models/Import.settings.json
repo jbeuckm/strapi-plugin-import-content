@@ -28,6 +28,12 @@
     },
     "mapping": {
       "type": "json"
+    },
+    "ongoing": {
+      "type": "boolean"
+    },
+    "progress": {
+      "type": "float"
     }
   },
   "collectionName": "import_import"

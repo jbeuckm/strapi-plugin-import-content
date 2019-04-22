@@ -23,7 +23,6 @@ module.exports = {
   },
 
   preAnalyzeImportFile: async ctx => {
-    console.log(ctx.query);
     const data = await strapi.plugins.import.services.import.preAnalyzeImportFile(
       ctx.query.url
     );

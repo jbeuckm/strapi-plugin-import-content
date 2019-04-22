@@ -20,26 +20,20 @@ export class CreateImportPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      models: null,
       analysis: null,
       loadingAnalysis: false,
-      selectedModel: null,
+      selectedName: null,
       mapping: {}
     };
 
     props.loadModels();
   }
 
-  getModels = async () => {
-    const response = await fetch('/content-type-builder/models');
-    const models = await response.json();
-
-    const filtered = models.filter(
-      model => !['import', 'importeditem'].includes(model.name)
-    );
-
-    this.setState({ models: filtered, selectedName: models[0].name });
-  };
+  componentWillReceiveProps(nextProps) {
+    if (!this.props.models && nextProps.models) {
+      this.setState({ selectedName: nextProps.models[0].name });
+    }
+  }
 
   preAnalyzeImportFile = async event => {
     const url = event.target.value;
