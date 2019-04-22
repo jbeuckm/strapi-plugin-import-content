@@ -2,8 +2,7 @@
   "connection": "default",
   "info": {
     "name": "import",
-    "description":
-      "Record an executed import and relate its products for possible later deletion"
+    "description": "Record an executed import and relate its products for possible later deletion"
   },
   "attributes": {
     "name": {
@@ -26,6 +25,9 @@
     "importeditems": {
       "collection": "importeditem",
       "via": "import"
+    },
+    "mapping": {
+      "type": "json"
     }
   },
   "collectionName": "import_import"

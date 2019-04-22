@@ -43,11 +43,14 @@ class MappingTable extends Component {
                     >
                       <option value="none">(none)</option>
                       {targetModel &&
-                        targetModel.attributes.map(attribute => (
-                          <option value={attribute.name}>
-                            {attribute.name} ({attribute.params.type})
-                          </option>
-                        ))}
+                        targetModel.attributes.map(attribute => {
+                          const type = attribute.params.type;
+                          return type ? (
+                            <option value={attribute.name}>
+                              {attribute.name} ({type})
+                            </option>
+                          ) : null;
+                        })}
                     </select>
                   )}
                 </td>
