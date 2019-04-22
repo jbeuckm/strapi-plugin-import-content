@@ -30,7 +30,7 @@ function createImportPageReducer(state = initialState, action) {
 
     case LOAD_MODELS_SUCCESS: {
       const filtered = payload.models.filter(
-        model => !['import', 'importeditem'].includes(model.name)
+        model => !['importconfig', 'importeditem'].includes(model.name)
       );
       return state.set('loading', false).set('models', filtered);
     }

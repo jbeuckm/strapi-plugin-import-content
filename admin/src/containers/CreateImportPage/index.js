@@ -43,9 +43,10 @@ export class CreateImportPage extends Component {
     const response = await fetch(
       `/import-content/preAnalyzeImportFile?url=${url}`
     );
-    const json = await response.json();
-    this.setState({ loadingAnalysis: false });
 
+    const json = await response.json();
+
+    this.setState({ loadingAnalysis: false });
     this.setState({ url, analysis: json });
   };
 

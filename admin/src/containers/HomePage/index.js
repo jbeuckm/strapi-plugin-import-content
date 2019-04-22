@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Button from 'components/Button';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -23,18 +24,40 @@ export class HomePage extends Component {
     this.props.loadImportConfigs();
   }
 
+  navigateToCreateImport = () => {
+    this.props.history.push(`/plugins/${pluginId}/create`);
+  };
+
   render() {
     const { importConfigs } = this.props;
 
     return (
       <div className={styles.homePage}>
-        {importConfigs &&
-          importConfigs.map(item => (
+        <Button
+          label="Create a new Import"
+          onClick={this.navigateToCreateImport}
+          secondaryHotlineAdd
+        />
+
+        <table>
+          <thead>
             <tr>
-              <td>{item.id}</td>
-              <td>{item.created_at}</td>
+              <td>ID</td>
+              <td>Created</td>
+              <td>URL</td>
             </tr>
-          ))}
+          </thead>
+          <tbody>
+            {importConfigs &&
+              importConfigs.map(item => (
+                <tr>
+                  <td>{item.id}</td>
+                  <td>{item.created_at}</td>
+                  <td>{item.url}</td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
       </div>
     );
   }
@@ -45,6 +68,7 @@ HomePage.contextTypes = {
 };
 
 HomePage.propTypes = {
+  history: PropTypes.object.isRequired,
   loadImports: PropTypes.func.isRequired,
   importConfigs: PropTypes.array
 };
