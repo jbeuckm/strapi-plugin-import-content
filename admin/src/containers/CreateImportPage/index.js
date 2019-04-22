@@ -32,9 +32,13 @@ export class CreateImportPage extends Component {
 
   getModels = async () => {
     const response = await fetch('/content-type-builder/models');
-    const json = await response.json();
+    const models = await response.json();
 
-    this.setState({ models: json });
+    const filtered = models.filter(
+      model => !['import', 'importeditem'].includes(model.name)
+    );
+
+    this.setState({ models: filtered, selectedName: models[0].name });
   };
 
   preAnalyzeImportFile = async event => {
@@ -94,13 +98,9 @@ export class CreateImportPage extends Component {
               <Fragment>
                 <span>Import to content of this type:</span>
                 <select onChange={this.selectContentType}>
-                  {models
-                    .filter(
-                      model => !['import', 'importeditem'].includes(model.name)
-                    )
-                    .map(model => (
-                      <option value={model.name}>{model.name}</option>
-                    ))}
+                  {models.map(model => (
+                    <option value={model.name}>{model.name}</option>
+                  ))}
                 </select>
               </Fragment>
             )}
