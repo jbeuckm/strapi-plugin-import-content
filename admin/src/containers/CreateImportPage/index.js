@@ -23,7 +23,8 @@ export class CreateImportPage extends Component {
       models: null,
       analysis: null,
       loadingAnalysis: false,
-      selectedModel: null
+      selectedModel: null,
+      mapping: {}
     };
 
     props.loadModels();
@@ -57,6 +58,10 @@ export class CreateImportPage extends Component {
     if (!models) return null;
 
     return models.find(model => model.name === this.state.selectedName);
+  };
+
+  setMapping = mapping => {
+    this.setState({ mapping });
   };
 
   render() {
@@ -93,7 +98,9 @@ export class CreateImportPage extends Component {
                     .filter(
                       model => !['import', 'importeditem'].includes(model.name)
                     )
-                    .map(model => <option>{model.name}</option>)}
+                    .map(model => (
+                      <option value={model.name}>{model.name}</option>
+                    ))}
                 </select>
               </Fragment>
             )}
@@ -104,6 +111,7 @@ export class CreateImportPage extends Component {
           <MappingTable
             analysis={analysis}
             targetModel={this.getTargetModel()}
+            onChange={this.setMapping}
           />
         )}
 
