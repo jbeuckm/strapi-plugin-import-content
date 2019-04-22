@@ -34,7 +34,10 @@ export function* saveImportConfig(event) {
   try {
     const { importConfig } = event.payload;
 
-    yield call(request, '/import', { method: 'POST', body: importConfig });
+    yield call(request, '/import-content', {
+      method: 'POST',
+      body: importConfig
+    });
 
     yield put(saveImportConfigSuccess());
   } catch (error) {
@@ -43,18 +46,10 @@ export function* saveImportConfig(event) {
   }
 }
 
-// Individual exports for testing
 export function* defaultSaga() {
-  const loadModelsWatcher = yield fork(takeLatest, LOAD_MODELS, loadModels);
-  const saveImportConfigWatcher = yield fork(
-    takeLatest,
-    SAVE_IMPORT_CONFIG,
-    saveImportConfig
-  );
-  // Suspend execution until location changes
-  //  yield take(LOCATION_CHANGE);
-  //  yield cancel(loadModelsWatcher);
+  yield fork(takeLatest, LOAD_MODELS, loadModels);
+
+  yield fork(takeLatest, SAVE_IMPORT_CONFIG, saveImportConfig);
 }
 
-// All sagas to be loaded
 export default defaultSaga;

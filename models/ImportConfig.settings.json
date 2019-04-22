@@ -1,9 +1,12 @@
 {
   "connection": "default",
   "info": {
-    "name": "import",
+    "name": "importconfig",
     "description":
       "Record an executed import and relate its products for possible later deletion"
+  },
+  "options": {
+    "timestamps": true
   },
   "attributes": {
     "date": {
@@ -18,10 +21,6 @@
     "fieldMapping": {
       "type": "json"
     },
-    "importedItems": {
-      "collection": "importeditem",
-      "via": "import"
-    },
     "ongoing": {
       "type": "boolean"
     },
@@ -29,5 +28,5 @@
       "type": "float"
     }
   },
-  "collectionName": "import_import"
+  "collectionName": "import-content_import-config"
 }

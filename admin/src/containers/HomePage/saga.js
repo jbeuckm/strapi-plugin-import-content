@@ -1,9 +1,24 @@
-// import { LOCATION_CHANGE } from 'react-router-redux';
-// import { takeLatest, put, fork, take, cancel } from 'redux-saga/effects';
+import { fork, takeLatest, call, put } from 'redux-saga/effects';
+import request from 'utils/request';
 
-// Individual exports for testing
-export function* defaultSaga() {
+import { loadImportConfigsSuccess, loadImportConfigsError } from './actions';
+import { LOAD_IMPORT_CONFIGS } from './constants';
+
+export function* loadImportConfigs() {
+  try {
+    const importConfigs = yield call(request, '/import-content', {
+      method: 'GET'
+    });
+
+    yield put(loadImportConfigsSuccess(importConfigs));
+  } catch (error) {
+    strapi.notification.error('notification.error');
+    yield put(loadImportConfigsError(error));
+  }
 }
 
-// All sagas to be loaded
+export function* defaultSaga() {
+  yield fork(takeLatest, LOAD_IMPORT_CONFIGS, loadImportConfigs);
+}
+
 export default defaultSaga;

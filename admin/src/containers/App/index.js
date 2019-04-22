@@ -21,10 +21,6 @@ import CreateImportPage from 'containers/CreateImportPage';
 import reducer from './reducer';
 
 class App extends React.Component {
-  componentDidMount() {
-    this.props.history.push(`/plugins/${pluginId}/create`);
-  }
-
   render() {
     return (
       <div className={pluginId}>

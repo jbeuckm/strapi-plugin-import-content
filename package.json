@@ -1,9 +1,9 @@
 {
-  "name": "strapi-plugin-import",
+  "name": "strapi-plugin-import-content",
   "version": "0.0.0",
   "description": "Import RSS etc. into Strapi.",
   "strapi": {
-    "name": "Import",
+    "name": "Import Content",
     "icon": "plug",
     "description": "Import RSS etc. into Strapi."
   },

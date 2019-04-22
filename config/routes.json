@@ -3,7 +3,7 @@
     {
       "method": "GET",
       "path": "/",
-      "handler": "Import.index",
+      "handler": "ImportConfig.index",
       "config": {
         "policies": []
       }
@@ -11,7 +11,7 @@
     {
       "method": "GET",
       "path": "/preAnalyzeImportFile",
-      "handler": "Import.preAnalyzeImportFile",
+      "handler": "ImportConfig.preAnalyzeImportFile",
       "config": {
         "policies": []
       }
@@ -19,7 +19,7 @@
     {
       "method": "POST",
       "path": "/",
-      "handler": "Import.create",
+      "handler": "ImportConfig.create",
       "config": {
         "policies": []
       }

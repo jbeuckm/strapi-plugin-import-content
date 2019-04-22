@@ -9,10 +9,13 @@ const selectHomePageDomain = () => state => state.get(`${pluginId}_homePage`);
  * Default selector used by HomePage
  */
 
-const selectHomePage = () =>
-  createSelector(
-    selectHomePageDomain(),
-    substate => substate.toJS(),
+export const selectImportConfigs = () =>
+  createSelector(selectHomePageDomain(), substate =>
+    substate.get('importConfigs')
   );
 
-export default selectHomePage;
+export const selectImportConfigsError = () =>
+  createSelector(selectHomePageDomain(), substate => substate.get('error'));
+
+export const selectImportConfigsLoading = () =>
+  createSelector(selectHomePageDomain(), substate => substate.get('loading'));

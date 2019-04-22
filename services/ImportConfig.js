@@ -5,6 +5,21 @@ const contentTypeParser = require('content-type-parser');
 const utils = require('strapi-hook-bookshelf/lib/utils/');
 
 module.exports = {
+  fetchAll: (params, populate) => {
+    // Select field to populate.
+    const withRelated =
+      populate ||
+      ImportConfig.associations
+        .filter(ast => ast.autoPopulate !== false)
+        .map(ast => ast.alias);
+
+    const filters = convertRestQueryParams(params);
+
+    return ImportConfig.query(buildQuery({ model: ImportConfig, filters }))
+      .fetchAll({ withRelated })
+      .then(data => data.toJSON());
+  },
+
   preAnalyzeImportFile: url =>
     new Promise((resolve, reject) => {
       request(url, null, async (err, res, body) => {
@@ -15,7 +30,7 @@ module.exports = {
         const contentType = contentTypeParser(res.headers['content-type']);
 
         if (contentType.isXML()) {
-          const result = await strapi.plugins['import'].services[
+          const result = await strapi.plugins['import-content'].services[
             'analyzexml'
           ].analyze(body);
 
@@ -30,7 +45,7 @@ module.exports = {
     }),
 
   add: async importConfig => {
-    const entry = await Import.forge(importConfig).save();
+    const entry = await ImportConfig.forge(importConfig).save();
 
     return entry;
   }
