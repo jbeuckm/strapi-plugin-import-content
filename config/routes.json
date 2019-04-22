@@ -15,6 +15,14 @@
       "config": {
         "policies": []
       }
+    },
+    {
+      "method": "POST",
+      "path": "/",
+      "handler": "Import.create",
+      "config": {
+        "policies": []
+      }
     }
   ]
 }

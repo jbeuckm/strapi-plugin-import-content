@@ -11,7 +11,7 @@ import PluginHeader from 'components/PluginHeader';
 import MappingTable from '../../components/MappingTable';
 
 import styles from './styles.scss';
-import { loadModels } from './actions';
+import { loadModels, saveImportConfig } from './actions';
 import { makeSelectLoading, makeSelectModels } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -20,10 +20,11 @@ export class CreateImportPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      url: null,
       analysis: null,
       loadingAnalysis: false,
       selectedName: null,
-      mapping: {}
+      fieldMapping: {}
     };
 
     props.loadModels();
@@ -43,7 +44,7 @@ export class CreateImportPage extends Component {
     const json = await response.json();
     this.setState({ loadingAnalysis: false });
 
-    this.setState({ analysis: json });
+    this.setState({ url, analysis: json });
   };
 
   selectContentType = event => {
@@ -58,8 +59,17 @@ export class CreateImportPage extends Component {
     return models.find(model => model.name === this.state.selectedName);
   };
 
-  setMapping = mapping => {
-    this.setState({ mapping });
+  setFieldMapping = fieldMapping => {
+    this.setState({ fieldMapping });
+  };
+
+  onSaveImport = () => {
+    const importConfig = {
+      url: this.state.url,
+      fieldMapping: this.state.fieldMapping
+    };
+    console.log('onSaveImport', importConfig);
+    this.props.saveImportConfig(importConfig);
   };
 
   render() {
@@ -105,16 +115,16 @@ export class CreateImportPage extends Component {
           <MappingTable
             analysis={analysis}
             targetModel={this.getTargetModel()}
-            onChange={this.setMapping}
+            onChange={this.setFieldMapping}
           />
         )}
 
         <div className="row">
           <div className="col-md-12">
             <Button
-              label={loading ? 'Loading...' : 'Submit'}
+              label={loading ? 'Loading...' : 'Import'}
               disabled={loading}
-              onClick={this.props.loadData}
+              onClick={this.onSaveImport}
               primary
             />
           </div>
@@ -135,7 +145,8 @@ CreateImportPage.propTypes = {
 };
 
 const mapDispatchToProps = {
-  loadModels
+  loadModels,
+  saveImportConfig
 };
 
 const mapStateToProps = createStructuredSelector({

@@ -2,11 +2,7 @@
 const request = require('request');
 const contentTypeParser = require('content-type-parser');
 
-/**
- * Import.js service
- *
- * @description: A set of functions similar to controller's actions to avoid code duplication.
- */
+const utils = require('strapi-hook-bookshelf/lib/utils/');
 
 module.exports = {
   preAnalyzeImportFile: url =>
@@ -31,5 +27,11 @@ module.exports = {
           });
         }
       });
-    })
+    }),
+
+  add: async importConfig => {
+    const entry = await Import.forge(importConfig).save();
+
+    return entry;
+  }
 };

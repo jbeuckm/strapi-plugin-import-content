@@ -2,32 +2,25 @@
   "connection": "default",
   "info": {
     "name": "import",
-    "description": "Record an executed import and relate its products for possible later deletion"
+    "description":
+      "Record an executed import and relate its products for possible later deletion"
   },
   "attributes": {
-    "name": {
-      "type": "string",
-      "minLength": 3,
-      "unique": true,
-      "configurable": false,
-      "required": false
-    },
-    "url": {
-      "type": "string",
-      "minLength": 3,
-      "unique": true,
-      "configurable": false,
-      "required": true
-    },
     "date": {
       "type": "date"
     },
-    "importeditems": {
+    "url": {
+      "type": "string"
+    },
+    "contentType": {
+      "type": "string"
+    },
+    "fieldMapping": {
+      "type": "json"
+    },
+    "importedItems": {
       "collection": "importeditem",
       "via": "import"
-    },
-    "mapping": {
-      "type": "json"
     },
     "ongoing": {
       "type": "boolean"
