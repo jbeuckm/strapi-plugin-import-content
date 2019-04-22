@@ -1,6 +1,7 @@
 'use strict';
 const request = require('request');
 const contentTypeParser = require('content-type-parser');
+const Joi = require('joi');
 
 const utils = require('strapi-hook-bookshelf/lib/utils/');
 
@@ -22,6 +23,11 @@ module.exports = {
 
   preAnalyzeImportFile: url =>
     new Promise((resolve, reject) => {
+      const schema = Joi.string().uri();
+
+      const { error, value } = Joi.validate(url, schema);
+      error && reject(error);
+
       request(url, null, async (err, res, body) => {
         if (err) {
           reject(err);
@@ -34,10 +40,9 @@ module.exports = {
             'analyzexml'
           ].analyze(body);
 
-          resolve({ status: 'success', sourceType: 'rss', ...result });
+          resolve({ sourceType: 'rss', ...result });
         } else {
-          resolve({
-            status: 'unknown type',
+          reject({
             contentType: contentType.toString()
           });
         }

@@ -15,6 +15,9 @@ module.exports = {
     const importConfig = ctx.request.body;
     console.log('create', importConfig);
 
+    importConfig.progress = 0;
+    importConfig.ongoing = true;
+
     const entry = await strapi.plugins['import-content'].models['importconfig']
       .forge(importConfig)
       .save();
@@ -35,10 +38,15 @@ module.exports = {
   },
 
   preAnalyzeImportFile: async ctx => {
-    const data = await strapi.plugins['import-content'].services[
-      'importconfig'
-    ].preAnalyzeImportFile(ctx.query.url);
+    const url = ctx.query.url;
+    try {
+      const data = await strapi.plugins['import-content'].services[
+        'importconfig'
+      ].preAnalyzeImportFile(url);
 
-    ctx.send(data);
+      ctx.send(data);
+    } catch (error) {
+      ctx.response.notAcceptable('could not parse', error);
+    }
   }
 };

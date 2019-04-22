@@ -42,7 +42,7 @@ function createImportPageReducer(state = initialState, action) {
       return state.set('loading', false).set('error', payload);
 
     case SAVE_IMPORT_CONFIG:
-      return state.set('saving', true);
+      return state.set('saving', true).set('created', null);
 
     case SAVE_IMPORT_CONFIG_SUCCESS: {
       console.log(payload);

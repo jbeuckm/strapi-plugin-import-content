@@ -35,6 +35,10 @@ export class CreateImportPage extends Component {
     props.loadModels();
   }
 
+  componentDidMount() {
+    this.setState({ fieldMapping: {} });
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.models && !this.state.selectedName) {
       this.setState({ selectedName: nextProps.models[0].name });
@@ -47,14 +51,22 @@ export class CreateImportPage extends Component {
   preAnalyzeImportFile = async event => {
     const url = event.target.value;
 
-    this.setState({ fieldMapping: {}, loadingAnalysis: true });
-    const response = await fetch(
-      `/import-content/preAnalyzeImportFile?url=${url}`
-    );
+    this.setState({ url, fieldMapping: {}, loadingAnalysis: true });
+    try {
+      const response = await fetch(
+        `/import-content/preAnalyzeImportFile?url=${url}`
+      );
 
-    const json = await response.json();
+      const json = await response.json();
 
-    this.setState({ loadingAnalysis: false, url, analysis: json });
+      this.setState({
+        loadingAnalysis: false,
+        analysis: response.status === 200 ? json : null
+      });
+    } catch (error) {
+      this.setState({ loadingAnalysis: false });
+      console.log({ error });
+    }
   };
 
   selectContentType = event => {
@@ -78,7 +90,7 @@ export class CreateImportPage extends Component {
       url: this.state.url,
       fieldMapping: this.state.fieldMapping
     };
-    console.log('onSaveImport', importConfig);
+
     this.props.saveImportConfig(importConfig);
   };
 

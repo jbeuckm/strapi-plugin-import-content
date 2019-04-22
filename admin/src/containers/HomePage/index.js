@@ -29,7 +29,6 @@ export class HomePage extends Component {
   };
 
   deleteImport = id => () => {
-    console.log('delete', id);
     this.props.deleteImport(id);
   };
 
@@ -56,7 +55,7 @@ export class HomePage extends Component {
           <tbody>
             {importConfigs &&
               importConfigs.map(item => (
-                <tr className={item.inProgress ? styles.inProgress : null}>
+                <tr className={item.ongoing ? styles.inProgress : null}>
                   <td>{item.id}</td>
                   <td>{item.created_at}</td>
                   <td>{item.url}</td>
