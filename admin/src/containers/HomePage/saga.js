@@ -2,6 +2,7 @@ import { fork, takeLatest, call, put } from 'redux-saga/effects';
 import request from 'utils/request';
 
 import {
+  loadImportConfigs,
   loadImportConfigsSuccess,
   loadImportConfigsError,
   deleteImportError,
@@ -9,7 +10,7 @@ import {
 } from './actions';
 import { LOAD_IMPORT_CONFIGS, DELETE_IMPORT } from './constants';
 
-export function* loadImportConfigs() {
+export function* loadImportConfigsSaga() {
   try {
     const importConfigs = yield call(request, '/import-content', {
       method: 'GET'
@@ -22,7 +23,7 @@ export function* loadImportConfigs() {
   }
 }
 
-export function* deleteImport(event) {
+export function* deleteImportSaga(event) {
   const { id } = event.payload;
   console.log('deleteImport', id);
   try {
@@ -31,6 +32,7 @@ export function* deleteImport(event) {
     });
 
     yield put(deleteImportSuccess(importConfigs));
+    yield put(loadImportConfigs());
   } catch (error) {
     strapi.notification.error('notification.error');
     yield put(deleteImportError(error));
@@ -38,8 +40,8 @@ export function* deleteImport(event) {
 }
 
 export function* defaultSaga() {
-  yield fork(takeLatest, LOAD_IMPORT_CONFIGS, loadImportConfigs);
-  yield fork(takeLatest, DELETE_IMPORT, deleteImport);
+  yield fork(takeLatest, LOAD_IMPORT_CONFIGS, loadImportConfigsSaga);
+  yield fork(takeLatest, DELETE_IMPORT, deleteImportSaga);
 }
 
 export default defaultSaga;

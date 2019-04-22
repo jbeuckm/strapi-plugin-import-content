@@ -36,7 +36,7 @@ export class CreateImportPage extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (!this.props.models && nextProps.models) {
+    if (nextProps.models && !this.state.selectedName) {
       this.setState({ selectedName: nextProps.models[0].name });
     }
     if (!this.props.created && nextProps.created) {
