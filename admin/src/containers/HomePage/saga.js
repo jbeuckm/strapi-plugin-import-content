@@ -25,7 +25,7 @@ export function* loadImportConfigsSaga() {
 
 export function* deleteImportSaga(event) {
   const { id } = event.payload;
-  console.log('deleteImport', id);
+
   try {
     const importConfigs = yield call(request, `/import-content/${id}`, {
       method: 'DELETE'
