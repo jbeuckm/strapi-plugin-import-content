@@ -46,10 +46,11 @@ export class HomePage extends Component {
         <table>
           <thead>
             <tr>
-              <td>ID</td>
-              <td>Created</td>
-              <td>URL</td>
-              <td>Progress</td>
+              <th>ID</th>
+              <th>Created</th>
+              <th>URL</th>
+              <th>Content Type</th>
+              <th>Progress</th>
             </tr>
           </thead>
           <tbody>
@@ -59,6 +60,7 @@ export class HomePage extends Component {
                   <td>{item.id}</td>
                   <td>{item.created_at}</td>
                   <td>{item.url}</td>
+                  <td>{item.contentType}</td>
                   <td>{item.progress}</td>
                   <td>
                     <Button

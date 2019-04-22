@@ -88,6 +88,7 @@ export class CreateImportPage extends Component {
   onSaveImport = () => {
     const importConfig = {
       url: this.state.url,
+      contentType: this.state.selectedName,
       fieldMapping: this.state.fieldMapping
     };
 
