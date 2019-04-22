@@ -23,6 +23,8 @@ module.exports = {
       .save();
 
     ctx.send(entry);
+
+    strapi.plugins['import-content'].services['importitems'].importItems(entry);
   },
 
   delete: async ctx => {
