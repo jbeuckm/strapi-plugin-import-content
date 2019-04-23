@@ -1,22 +1,21 @@
-'use strict';
-const RssParser = require('rss-parser');
-var ss = require('simple-statistics');
+"use strict";
+var ss = require("simple-statistics");
 
 const detectStringFieldFormat = data => {
-  if (new Date(data).toString() !== 'Invalid Date') return 'date';
+  if (new Date(data).toString() !== "Invalid Date") return "date";
 
-  return 'string';
+  return "string";
 };
 
 const detectFieldFormat = data => {
   switch (typeof data) {
-    case 'number':
-      return 'number';
+    case "number":
+      return "number";
 
-    case 'boolean':
-      return 'boolean';
+    case "boolean":
+      return "boolean";
 
-    case 'string':
+    case "string":
       return detectStringFieldFormat(data);
   }
 };
@@ -35,11 +34,8 @@ const compileStatsForField = (shape, fieldData) => {
 };
 
 module.exports = {
-  analyze: async body => {
-    const parser = new RssParser();
-    const feed = await parser.parseString(body);
-
-    const fieldTotals = feed.items.reduce((acc, item) => {
+  analyze: async items => {
+    const fieldTotals = items.reduce((acc, item) => {
       Object.keys(item).forEach(key => {
         acc[key] = compileStatsForField(acc[key], item[key]);
       });
@@ -64,6 +60,6 @@ module.exports = {
       fieldStats.push(fieldStat);
     });
 
-    return { itemCount: feed.items.length, fieldStats };
+    return { itemCount: items.length, fieldStats };
   }
 };

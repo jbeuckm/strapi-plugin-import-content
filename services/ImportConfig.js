@@ -1,36 +1,25 @@
-'use strict';
-const request = require('request');
-const contentTypeParser = require('content-type-parser');
-const Joi = require('joi');
-
-const utils = require('strapi-hook-bookshelf/lib/utils/');
+"use strict";
+const contentTypeParser = require("content-type-parser");
+const RssParser = require("rss-parser");
 
 module.exports = {
-  preAnalyzeImportFile: url =>
-    new Promise((resolve, reject) => {
-      const schema = Joi.string().uri();
+  preAnalyzeImportFile: ({ contentType, body }) =>
+    new Promise(async (resolve, reject) => {
+      const parsedContentType = contentTypeParser(contentType);
 
-      const { error } = Joi.validate(url, schema);
-      error && reject(error);
+      if (parsedContentType.isXML()) {
+        const parser = new RssParser();
+        const feed = await parser.parseString(body);
 
-      request(url, null, async (err, res, body) => {
-        if (err) {
-          reject(err);
-        }
+        const result = await strapi.plugins["import-content"].services[
+          "analyzeitems"
+        ].analyze(feed.items);
 
-        const contentType = contentTypeParser(res.headers['content-type']);
-
-        if (contentType.isXML()) {
-          const result = await strapi.plugins['import-content'].services[
-            'analyzexml'
-          ].analyze(body);
-
-          resolve({ sourceType: 'rss', ...result });
-        } else {
-          reject({
-            contentType: contentType.toString()
-          });
-        }
-      });
+        resolve({ sourceType: "rss", ...result });
+      } else {
+        reject({
+          contentType: parsedContentType.toString()
+        });
+      }
     })
 };
