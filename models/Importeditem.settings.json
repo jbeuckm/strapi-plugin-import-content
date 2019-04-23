@@ -1,0 +1,26 @@
+{
+  "connection": "default",
+  "collectionName": "importeditems",
+  "info": {
+    "name": "importeditem",
+    "description": "A record of an item that has been imported with a given ImportConfig"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "comment": ""
+  },
+  "attributes": {
+    "ContentType": {
+      "type": "string"
+    },
+    "ContentId": {
+      "type": "integer"
+    },
+    "importconfig": {
+      "model": "importconfig",
+      "via": "importeditems",
+      "plugin": "import-content"
+    }
+  }
+}

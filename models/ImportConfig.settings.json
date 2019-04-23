@@ -2,8 +2,7 @@
   "connection": "default",
   "info": {
     "name": "importconfig",
-    "description":
-      "Record an executed import and relate its products for possible later deletion"
+    "description": "Record an executed import and relate its products for possible later deletion"
   },
   "options": {
     "timestamps": true
@@ -26,6 +25,11 @@
     },
     "progress": {
       "type": "float"
+    },
+    "importeditems": {
+      "collection": "importeditem",
+      "via": "importconfig",
+      "plugin": "import-content"
     }
   },
   "collectionName": "import-content_import-config"
