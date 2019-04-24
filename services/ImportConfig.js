@@ -1,25 +1,15 @@
 "use strict";
-const contentTypeParser = require("content-type-parser");
-const RssParser = require("rss-parser");
-
+const fileUtils = require("./utils/fileUtils");
+const analyzer = require("./utils/analyzer");
 module.exports = {
-  preAnalyzeImportFile: ({ contentType, body }) =>
-    new Promise(async (resolve, reject) => {
-      const parsedContentType = contentTypeParser(contentType);
+  preAnalyzeImportFile: async ({ contentType, body }) => {
+    const { sourceType, items } = await fileUtils.getItemsForFileData({
+      contentType,
+      body
+    });
 
-      if (parsedContentType.isXML()) {
-        const parser = new RssParser();
-        const feed = await parser.parseString(body);
+    const analysis = await analyzer.analyze(items);
 
-        const result = await strapi.plugins["import-content"].services[
-          "analyzeitems"
-        ].analyze(feed.items);
-
-        resolve({ sourceType: "rss", ...result });
-      } else {
-        reject({
-          contentType: parsedContentType.toString()
-        });
-      }
-    })
+    return { sourceType, ...analysis };
+  }
 };
