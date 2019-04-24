@@ -7,10 +7,22 @@ const queues = {};
 
 const IMPORT_THROTTLE = 1000;
 
-const importNextItem = importConfig => {
+const mapFields = (item, fieldMapping) => {
+  const importedItem = {};
+
+  Object.keys(fieldMapping).forEach(sourceField => {
+    const targetField = fieldMapping[sourceField];
+
+    importedItem[targetField] = item[sourceField];
+  });
+
+  return importedItem;
+};
+
+const importNextItem = async importConfig => {
   const item = queues[importConfig.id].shift();
   if (!item) {
-    console.log("import complete", importConfig);
+    console.log("import complete");
     importConfig.ongoing = false;
 
     strapi.plugins["import-content"].models["importconfig"]
@@ -19,12 +31,17 @@ const importNextItem = importConfig => {
     return;
   }
 
-  console.log("will import", item);
+  console.log("will import next", importConfig);
 
   //TODO: map fields and create target model
+  const importedItem = mapFields(item, importConfig.fieldMapping);
 
-  strapi.plugins["import-content"].models["importeditem"]
-    .forge({ importconfig: importConfig.id })
+  const savedContent = await strapi.models[importConfig.contentType]
+    .forge(importedItem)
+    .save();
+  console.log({ savedContent });
+  await strapi.plugins["import-content"].models["importeditem"]
+    .forge({ importconfig: importConfig.id, contentId: savedContent.id })
     .save();
 
   importConfig.progress++;

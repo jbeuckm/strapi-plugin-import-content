@@ -1,25 +1,35 @@
-import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
-import { injectIntl } from 'react-intl';
-import { compose } from 'redux';
-import pluginId from 'pluginId';
+import React, { Component, Fragment } from "react";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { createStructuredSelector } from "reselect";
+import { injectIntl } from "react-intl";
+import { compose } from "redux";
+import pluginId from "pluginId";
 
-import Button from 'components/Button';
-import PluginHeader from 'components/PluginHeader';
-import MappingTable from '../../components/MappingTable';
+import Button from "components/Button";
+import PluginHeader from "components/PluginHeader";
+import MappingTable from "../../components/MappingTable";
 
-import styles from './styles.scss';
-import { loadModels, saveImportConfig } from './actions';
+import styles from "./styles.scss";
+import { loadModels, saveImportConfig } from "./actions";
 import {
   makeSelectLoading,
   makeSelectModels,
   makeSelectCreated,
   makeSelectSaving
-} from './selectors';
-import reducer from './reducer';
-import saga from './saga';
+} from "./selectors";
+import reducer from "./reducer";
+import saga from "./saga";
+
+const removeNones = mapping => {
+  const result = {};
+  Object.keys(mapping).forEach(key => {
+    if (mapping[key] !== "none") {
+      result[key] = mapping[key];
+    }
+  });
+  return result;
+};
 
 export class CreateImportPage extends Component {
   constructor(props) {
@@ -89,7 +99,7 @@ export class CreateImportPage extends Component {
     const importConfig = {
       url: this.state.url,
       contentType: this.state.selectedName,
-      fieldMapping: this.state.fieldMapping
+      fieldMapping: removeNones(this.state.fieldMapping)
     };
 
     this.props.saveImportConfig(importConfig);
@@ -104,8 +114,8 @@ export class CreateImportPage extends Component {
     return (
       <div className={styles.createImportPage}>
         <PluginHeader
-          title={'Import Content'}
-          description={'Import content from an RSS feed.'}
+          title={"Import Content"}
+          description={"Import content from an RSS feed."}
         />
 
         <div className="row">
@@ -147,7 +157,7 @@ export class CreateImportPage extends Component {
         <div className="row">
           <div className="col-md-12">
             <Button
-              label={loading ? 'Loading...' : 'Import'}
+              label={loading ? "Loading..." : "Import"}
               disabled={saveDisabled}
               onClick={this.onSaveImport}
               primary
@@ -189,11 +199,11 @@ const withConnect = connect(
 );
 
 const withReducer = strapi.injectReducer({
-  key: 'createImportPage',
+  key: "createImportPage",
   reducer,
   pluginId
 });
-const withSaga = strapi.injectSaga({ key: 'createImportPage', saga, pluginId });
+const withSaga = strapi.injectSaga({ key: "createImportPage", saga, pluginId });
 
 export default compose(
   withReducer,
