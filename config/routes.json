@@ -2,14 +2,6 @@
   "routes": [
     {
       "method": "GET",
-      "path": "/",
-      "handler": "ImportConfig.index",
-      "config": {
-        "policies": []
-      }
-    },
-    {
-      "method": "GET",
       "path": "/preAnalyzeImportFile",
       "handler": "ImportConfig.preAnalyzeImportFile",
       "config": {
@@ -20,6 +12,22 @@
       "method": "POST",
       "path": "/",
       "handler": "ImportConfig.create",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/",
+      "handler": "ImportConfig.index",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/:importId/undo",
+      "handler": "ImportConfig.undo",
       "config": {
         "policies": []
       }

@@ -27,6 +27,20 @@ module.exports = {
     strapi.plugins["import-content"].services["importitems"].importItems(entry);
   },
 
+  undo: async ctx => {
+    const importId = ctx.params.importId;
+
+    const importConfig = await strapi.plugins["import-content"].models[
+      "importconfig"
+    ].forge({
+      id: importId
+    });
+
+    console.log("undo", importConfig);
+
+    ctx.send(importConfig.attributes);
+  },
+
   delete: async ctx => {
     const importId = ctx.params.importId;
 
