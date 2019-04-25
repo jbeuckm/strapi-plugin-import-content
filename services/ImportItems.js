@@ -31,15 +31,13 @@ const importNextItem = async importConfig => {
     return;
   }
 
-  console.log("will import next", importConfig);
-
   //TODO: map fields and create target model
   const importedItem = mapFields(item, importConfig.fieldMapping);
 
   const savedContent = await strapi.models[importConfig.contentType]
     .forge(importedItem)
     .save();
-  console.log({ savedContent });
+
   await strapi.plugins["import-content"].models["importeditem"]
     .forge({ importconfig: importConfig.id, contentId: savedContent.id })
     .save();
@@ -69,9 +67,8 @@ module.exports = {
         contentType,
         body
       });
-      console.log({ items });
+
       queues[importConfigRecord.id] = items;
-      console.log({ queueItems: queues[importConfigRecord.id] });
 
       resolve({
         status: "import started",

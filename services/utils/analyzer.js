@@ -2,7 +2,7 @@
 var ss = require("simple-statistics");
 const fieldUtils = require("./fieldUtils");
 
-const analyze = async items => {
+const analyze = items => {
   const fieldTotals = items.reduce((acc, item) => {
     Object.keys(item).forEach(key => {
       acc[key] = fieldUtils.compileStatsForField(acc[key], item[key]);
