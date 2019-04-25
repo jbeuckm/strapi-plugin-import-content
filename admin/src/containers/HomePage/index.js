@@ -25,11 +25,13 @@ export class HomePage extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (
-      nextProps.importConfigs &&
-      nextProps.importConfigs.some(config => config.ongoing)
-    ) {
-      setTimeout(() => this.props.loadImportConfigs(), 2000);
+    if (this.props.loading && !nextProps.loading) {
+      if (
+        nextProps.importConfigs &&
+        nextProps.importConfigs.some(config => config.ongoing)
+      ) {
+        setTimeout(() => this.props.loadImportConfigs(), 2000);
+      }
     }
   }
 
