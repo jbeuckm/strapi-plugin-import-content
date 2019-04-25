@@ -42,11 +42,9 @@ module.exports = {
   delete: async ctx => {
     const importId = ctx.params.importId;
 
-    await strapi.plugins["import-content"].models["importconfig"]
-      .forge({
-        id: importId
-      })
-      .destroy();
+    await strapi.query("importconfig", "import-content").delete({
+      id: importId
+    });
 
     ctx.send({ message: "ok" });
   },
