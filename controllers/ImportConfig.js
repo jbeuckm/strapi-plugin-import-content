@@ -2,11 +2,7 @@
 
 module.exports = {
   index: async ctx => {
-    const entries = await strapi.plugins["import-content"].models[
-      "importconfig"
-    ]
-      .fetchAll()
-      .then(data => data.toJSON());
+    const entries = await strapi.query("importconfig", "import-content").find();
 
     ctx.send(entries);
   },
