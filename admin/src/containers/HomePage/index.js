@@ -24,6 +24,15 @@ export class HomePage extends Component {
     this.props.loadImportConfigs();
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (
+      nextProps.importConfigs &&
+      nextProps.importConfigs.some(config => config.ongoing)
+    ) {
+      setTimeout(() => this.props.loadImportConfigs(), 2000);
+    }
+  }
+
   navigateToCreateImport = () => {
     this.props.history.push(`/plugins/${pluginId}/create`);
   };
