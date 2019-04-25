@@ -23,11 +23,11 @@ const importNextItem = async importConfig => {
   const item = queues[importConfig.id].shift();
   if (!item) {
     console.log("import complete");
-    importConfig.ongoing = false;
 
-    strapi.plugins["import-content"].models["importconfig"]
-      .forge(importConfig)
-      .save();
+    await strapi
+      .query("importconfig", "import-content")
+      .update({ id: importConfig.id }, { ongoing: false });
+
     return;
   }
 
@@ -46,9 +46,9 @@ const importNextItem = async importConfig => {
 
   importConfig.progress++;
 
-  strapi.plugins["import-content"].models["importconfig"]
-    .forge(importConfig)
-    .save();
+  await strapi
+    .query("importconfig", "import-content")
+    .update({ id: importConfig.id }, { progress: importConfig.progress });
 
   setTimeout(() => importNextItem(importConfig), IMPORT_THROTTLE);
 };
