@@ -31,5 +31,7 @@ const compileStatsForField = (shape, fieldData) => {
 };
 
 module.exports = {
+  detectStringFieldFormat,
+  detectFieldFormat,
   compileStatsForField
 };

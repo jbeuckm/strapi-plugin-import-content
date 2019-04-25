@@ -19,11 +19,12 @@
     "generate": "node ./node_modules/strapi-helper-plugin/node_modules/plop --plopfile ./node_modules/strapi-helper-plugin/lib/internals/generators/index.js",
     "lint": "node ./node_modules/strapi-helper-plugin/node_modules/.bin/eslint --ignore-path .gitignore --ignore-pattern '/admin/build/' --config ./node_modules/strapi-helper-plugin/lib/internals/eslint/.eslintrc.json admin",
     "prettier": "node ./node_modules/strapi-helper-plugin/node_modules/.bin/prettier --single-quote --trailing-comma es5 --write \"{admin,__{tests,mocks}__}/**/*.js\"",
-    "test": "npm run lint",
+    "test": "jest",
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
     "content-type-parser": "^1.0.2",
+    "jest": "^24.7.1",
     "joi": "^14.3.1",
     "moment": "^2.24.0",
     "request": "^2.88.0",
