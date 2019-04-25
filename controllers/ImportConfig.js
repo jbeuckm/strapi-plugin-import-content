@@ -9,14 +9,13 @@ module.exports = {
 
   create: async ctx => {
     const importConfig = ctx.request.body;
-    console.log("create", importConfig);
 
     importConfig.progress = 0;
     importConfig.ongoing = true;
 
-    const entry = await strapi.plugins["import-content"].models["importconfig"]
-      .forge(importConfig)
-      .save();
+    const entry = await strapi
+      .query("importconfig", "import-content")
+      .create(importConfig);
 
     ctx.send(entry);
 

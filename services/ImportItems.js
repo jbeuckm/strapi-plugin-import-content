@@ -38,13 +38,11 @@ const importNextItem = async importConfig => {
     .forge(importedItem)
     .save();
 
-  await strapi.plugins["import-content"].models["importeditem"]
-    .forge({
-      importconfig: importConfig.id,
-      contentId: savedContent.id,
-      contentType: importConfig.contentType
-    })
-    .save();
+  await strapi.query("importeditem", "import-content").create({
+    importconfig: importConfig.id,
+    contentId: savedContent.id,
+    contentType: importConfig.contentType
+  });
 
   importConfig.progress++;
 
