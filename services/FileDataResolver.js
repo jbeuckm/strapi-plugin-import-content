@@ -1,6 +1,6 @@
-"use strict";
-const request = require("request");
-const Joi = require("joi");
+'use strict';
+const request = require('request');
+const Joi = require('joi');
 
 /*
  * Get the file data from the URL in the query.
@@ -18,7 +18,7 @@ const getDataFromUrl = url => {
         reject(err);
       }
 
-      resolve({ contentType: res.headers["content-type"], body });
+      resolve({ contentType: res.headers['content-type'], body });
     });
   });
 };
