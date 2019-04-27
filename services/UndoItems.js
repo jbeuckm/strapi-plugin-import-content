@@ -7,7 +7,7 @@ const UNDO_THROTTLE = 100;
 
 const undoNextItem = async importConfig => {
   const item = queues[importConfig.id].shift();
-  console.log('undoing item ', { item });
+
   if (!item) {
     console.log('undo complete');
 
@@ -32,8 +32,6 @@ const undoNextItem = async importConfig => {
 module.exports = {
   undoItems: importConfig =>
     new Promise(async (resolve, reject) => {
-      console.log('undoitems', importConfig);
-
       try {
         queues[importConfig.id] = importConfig.importeditems;
       } catch (error) {

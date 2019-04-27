@@ -23,7 +23,7 @@ module.exports = {
       .create(importConfig);
 
     ctx.send(entry);
-    console.log('created', entry);
+
     strapi.plugins['import-content'].services['importitems'].importItems(entry);
   },
 
@@ -34,7 +34,7 @@ module.exports = {
       .query('importconfig', 'import-content')
       .findOne({ id: importId });
 
-    console.log('undo', importId, importConfig);
+    console.log('undo', importId);
 
     ctx.send(importConfig);
 
