@@ -1,8 +1,8 @@
-"use strict";
+'use strict';
 
 module.exports = {
   index: async ctx => {
-    const entries = await strapi.query("importconfig", "import-content").find();
+    const entries = await strapi.query('importconfig', 'import-content').find();
 
     ctx.send(entries);
   },
@@ -14,22 +14,22 @@ module.exports = {
     importConfig.ongoing = true;
 
     const entry = await strapi
-      .query("importconfig", "import-content")
+      .query('importconfig', 'import-content')
       .create(importConfig);
 
     ctx.send(entry);
 
-    strapi.plugins["import-content"].services["importitems"].importItems(entry);
+    strapi.plugins['import-content'].services['importitems'].importItems(entry);
   },
 
   undo: async ctx => {
     const importId = ctx.params.importId;
 
     const importConfig = await strapi
-      .query("importconfig", "import-content")
+      .query('importconfig', 'import-content')
       .findOne({ id: importId });
 
-    console.log("undo", importConfig);
+    console.log('undo', importConfig);
 
     ctx.send(importConfig);
   },
@@ -37,29 +37,29 @@ module.exports = {
   delete: async ctx => {
     const importId = ctx.params.importId;
 
-    await strapi.query("importconfig", "import-content").delete({
+    await strapi.query('importconfig', 'import-content').delete({
       id: importId
     });
 
-    ctx.send({ message: "ok" });
+    ctx.send({ message: 'ok' });
   },
 
   preAnalyzeImportFile: async ctx => {
-    const services = strapi.plugins["import-content"].services;
+    const services = strapi.plugins['import-content'].services;
 
     const { contentType, body } = await services[
-      "filedataresolver"
+      'filedataresolver'
     ].resolveFileDataFromRequest(ctx);
 
     try {
-      const data = await services["importconfig"].preAnalyzeImportFile({
+      const data = await services['importconfig'].preAnalyzeImportFile({
         contentType,
         body
       });
 
       ctx.send(data);
     } catch (error) {
-      ctx.response.notAcceptable("could not parse", error);
+      ctx.response.notAcceptable('could not parse', error);
     }
   }
 };

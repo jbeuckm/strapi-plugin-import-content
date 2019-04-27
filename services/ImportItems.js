@@ -3,7 +3,7 @@ const fileUtils = require('./utils/fileUtils');
 
 const queues = {};
 
-const IMPORT_THROTTLE = 1000;
+const IMPORT_THROTTLE = 100;
 
 const mapFields = (item, fieldMapping) => {
   const importedItem = {};
@@ -37,8 +37,8 @@ const importNextItem = async importConfig => {
 
   await strapi.query('importeditem', 'import-content').create({
     importconfig: importConfig.id,
-    contentId: savedContent.id,
-    contentType: importConfig.contentType
+    ContentId: savedContent.id,
+    ContentType: importConfig.contentType
   });
 
   importConfig.progress++;
