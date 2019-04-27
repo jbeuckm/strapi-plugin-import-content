@@ -2,13 +2,14 @@
 
 Import RSS items to your content type with Strapi.
 
+[![Build Status](https://dev.azure.com/joebeuckman0156/strapi-plugin-import-content/_apis/build/status/jbeuckm.strapi-plugin-import-content?branchName=master)](https://dev.azure.com/joebeuckman0156/strapi-plugin-import-content/_build/latest?definitionId=1&branchName=master)
+
 ### Installation
 
 ```
 cd my-strapi-project/plugins
 npm i strapi-plugin-import-content import-content
 ```
-
 
 Click for video demo:
 [![Click for demo video](video_thumbnail.png)](https://youtu.be/NOFioYMKPJk)
