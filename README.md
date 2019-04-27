@@ -11,4 +11,4 @@ npm i strapi-plugin-import-content import-content
 
 
 Click for video demo:
-[![Click for demo video](video_thumbnail.png)]((https://www.youtube.com/watch?v=StTqXEQ2l-Y "Everything Is AWESOME")
+[![Click for demo video](video_thumbnail.png)](https://youtu.be/NOFioYMKPJk)
