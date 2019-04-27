@@ -4,13 +4,18 @@ module.exports = {
   index: async ctx => {
     const entries = await strapi.query('importconfig', 'import-content').find();
 
-    ctx.send(entries);
+    const withCounts = entries.map(entry => ({
+      ...entry,
+      importedCount: entry.importeditems.length,
+      importeditems: undefined
+    }));
+
+    ctx.send(withCounts);
   },
 
   create: async ctx => {
     const importConfig = ctx.request.body;
 
-    importConfig.progress = 0;
     importConfig.ongoing = true;
 
     const entry = await strapi
@@ -18,7 +23,7 @@ module.exports = {
       .create(importConfig);
 
     ctx.send(entry);
-
+    console.log('created', entry);
     strapi.plugins['import-content'].services['importitems'].importItems(entry);
   },
 
@@ -29,9 +34,13 @@ module.exports = {
       .query('importconfig', 'import-content')
       .findOne({ id: importId });
 
-    console.log('undo', importConfig);
+    console.log('undo', importId, importConfig);
 
     ctx.send(importConfig);
+
+    strapi.plugins['import-content'].services['undoitems'].undoItems(
+      importConfig
+    );
   },
 
   delete: async ctx => {

@@ -1,23 +1,23 @@
-import React, { Component } from "react";
-import Button from "components/Button";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import { createStructuredSelector } from "reselect";
-import { injectIntl } from "react-intl";
-import { compose } from "redux";
-import pluginId from "pluginId";
+import React, { Component } from 'react';
+import Button from 'components/Button';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+import { injectIntl } from 'react-intl';
+import { compose } from 'redux';
+import pluginId from 'pluginId';
 
 import {
   selectImportConfigs,
   selectImportConfigsError,
   selectImportConfigsLoading
-} from "./selectors";
+} from './selectors';
 
-import styles from "./styles.scss";
+import styles from './styles.scss';
 
-import { loadImportConfigs, undoImport, deleteImport } from "./actions";
-import reducer from "./reducer";
-import saga from "./saga";
+import { loadImportConfigs, undoImport, deleteImport } from './actions';
+import reducer from './reducer';
+import saga from './saga';
 
 export class HomePage extends Component {
   componentDidMount() {
@@ -65,7 +65,7 @@ export class HomePage extends Component {
               <th>Created</th>
               <th>URL</th>
               <th>Content Type</th>
-              <th>Progress</th>
+              <th>Items</th>
             </tr>
           </thead>
           <tbody>
@@ -76,7 +76,7 @@ export class HomePage extends Component {
                   <td>{item.created_at}</td>
                   <td>{item.url}</td>
                   <td>{item.contentType}</td>
-                  <td>{item.progress}</td>
+                  <td>{item.importedCount}</td>
                   <td>
                     <Button
                       label="delete"
@@ -125,11 +125,11 @@ const withConnect = connect(
 );
 
 const withReducer = strapi.injectReducer({
-  key: "homePage",
+  key: 'homePage',
   reducer,
   pluginId
 });
-const withSaga = strapi.injectSaga({ key: "homePage", saga, pluginId });
+const withSaga = strapi.injectSaga({ key: 'homePage', saga, pluginId });
 
 export default compose(
   withReducer,

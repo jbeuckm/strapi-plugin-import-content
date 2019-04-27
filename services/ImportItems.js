@@ -41,12 +41,6 @@ const importNextItem = async importConfig => {
     ContentType: importConfig.contentType
   });
 
-  importConfig.progress++;
-
-  await strapi
-    .query('importconfig', 'import-content')
-    .update({ id: importConfig.id }, { progress: importConfig.progress });
-
   setTimeout(() => importNextItem(importConfig), IMPORT_THROTTLE);
 };
 
