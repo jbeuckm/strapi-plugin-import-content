@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Button from 'components/Button';
+import IcoContainer from 'components/IcoContainer';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -80,13 +81,18 @@ export class HomePage extends Component {
                     <td>{updatedAt.fromNow()}</td>
                     <td>{item.importedCount}</td>
                     <td>
-                      <Button
-                        label="delete"
-                        onClick={this.deleteImport(item.id)}
+                      <IcoContainer
+                        icons={[
+                          {
+                            icoType: 'undo',
+                            onClick: this.undoImport(item.id)
+                          },
+                          {
+                            icoType: 'trash',
+                            onClick: this.deleteImport(item.id)
+                          }
+                        ]}
                       />
-                    </td>
-                    <td>
-                      <Button label="undo" onClick={this.undoImport(item.id)} />
                     </td>
                   </tr>
                 );
