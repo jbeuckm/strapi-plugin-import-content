@@ -6,6 +6,7 @@ import { createStructuredSelector } from 'reselect';
 import { injectIntl } from 'react-intl';
 import { compose } from 'redux';
 import pluginId from 'pluginId';
+import moment from 'moment';
 
 import {
   selectImportConfigs,
@@ -61,33 +62,35 @@ export class HomePage extends Component {
         <table>
           <thead>
             <tr>
-              <th>ID</th>
-              <th>Created</th>
               <th>URL</th>
               <th>Content Type</th>
+              <th>Updated</th>
               <th>Items</th>
             </tr>
           </thead>
           <tbody>
             {importConfigs &&
-              importConfigs.map(item => (
-                <tr className={item.ongoing ? styles.inProgress : null}>
-                  <td>{item.id}</td>
-                  <td>{item.created_at}</td>
-                  <td>{item.url}</td>
-                  <td>{item.contentType}</td>
-                  <td>{item.importedCount}</td>
-                  <td>
-                    <Button
-                      label="delete"
-                      onClick={this.deleteImport(item.id)}
-                    />
-                  </td>
-                  <td>
-                    <Button label="undo" onClick={this.undoImport(item.id)} />
-                  </td>
-                </tr>
-              ))}
+              importConfigs.map(item => {
+                const updatedAt = moment(item.updated_at);
+
+                return (
+                  <tr className={item.ongoing ? styles.inProgress : null}>
+                    <td>{item.url}</td>
+                    <td>{item.contentType}</td>
+                    <td>{updatedAt.fromNow()}</td>
+                    <td>{item.importedCount}</td>
+                    <td>
+                      <Button
+                        label="delete"
+                        onClick={this.deleteImport(item.id)}
+                      />
+                    </td>
+                    <td>
+                      <Button label="undo" onClick={this.undoImport(item.id)} />
+                    </td>
+                  </tr>
+                );
+              })}
           </tbody>
         </table>
       </div>
