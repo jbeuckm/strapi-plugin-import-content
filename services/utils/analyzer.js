@@ -1,34 +1,62 @@
-"use strict";
-var ss = require("simple-statistics");
-const fieldUtils = require("./fieldUtils");
+'use strict';
+const _ = require('lodash');
+var ss = require('simple-statistics');
+const { compileStatsForFieldData } = require('./fieldUtils');
+
+const getFieldNameSet = items => {
+  const fieldNames = new Set();
+  items.forEach(item => {
+    try {
+      Object.keys(item).forEach(fieldName => fieldNames.add(fieldName));
+    } catch (e) {
+      console.log(e);
+    }
+  });
+
+  return fieldNames;
+};
 
 const analyze = items => {
-  const fieldTotals = items.reduce((acc, item) => {
-    Object.keys(item).forEach(key => {
-      acc[key] = fieldUtils.compileStatsForField(acc[key], item[key]);
+  const fieldNames = getFieldNameSet(items);
+
+  const fieldAnalyses = {};
+  fieldNames.forEach(fieldName => (fieldAnalyses[fieldName] = []));
+
+  items.forEach(item => {
+    fieldNames.forEach(fieldName => {
+      fieldAnalyses[fieldName].push(compileStatsForFieldData(item[fieldName]));
     });
-    return acc;
-  }, {});
+  });
 
-  const fieldStats = [];
-  Object.keys(fieldTotals).forEach(key => {
-    const totals = fieldTotals[key];
+  const fieldStats = Object.keys(fieldAnalyses).map(fieldName => {
+    const fieldAnalysis = fieldAnalyses[fieldName];
 
-    const fieldStat = { fieldName: key, count: totals.formats.length };
+    const fieldStat = { fieldName, count: fieldAnalysis.length };
 
-    const formats = new Set(totals.formats);
-    if (formats.size === 1) {
-      fieldStat.format = totals.formats[0];
+    try {
+      fieldStat.format = _
+        .chain(fieldAnalysis)
+        .countBy('format')
+        .map((value, key) => ({ count: value, type: key }))
+        .sortBy('count')
+        .reverse()
+        .head()
+        .get('type')
+        .value();
+    } catch (e) {
+      console.log(e);
     }
 
-    fieldStat.minLength = ss.min(totals.lengths);
-    fieldStat.maxLength = ss.max(totals.lengths);
-    fieldStat.meanLength = ss.mean(totals.lengths).toFixed(2);
+    const lengths = _.map(fieldAnalysis, 'length');
 
-    fieldStats.push(fieldStat);
+    fieldStat.minLength = ss.min(lengths);
+    fieldStat.maxLength = ss.max(lengths);
+    fieldStat.meanLength = ss.mean(lengths).toFixed(2);
+
+    return fieldStat;
   });
 
   return { itemCount: items.length, fieldStats };
 };
 
-module.exports = { analyze };
+module.exports = { getFieldNameSet, analyze };
