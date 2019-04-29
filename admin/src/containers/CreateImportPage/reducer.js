@@ -1,9 +1,3 @@
-/*
- *
- * createImportPage reducer
- *
- */
-
 import { fromJS } from 'immutable';
 
 import {

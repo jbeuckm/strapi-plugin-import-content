@@ -15,7 +15,7 @@ module.exports = {
 
   create: async ctx => {
     const importConfig = ctx.request.body;
-
+    console.log('create', importConfig.fieldMapping);
     importConfig.ongoing = true;
 
     const entry = await strapi

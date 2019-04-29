@@ -3,9 +3,15 @@ import PropTypes from 'prop-types';
 
 class MappingTable extends Component {
   state = { mapping: {} };
-  setMapping = (source, target) => {
+
+  setMapping = (source, targetField) => {
     this.setState(
-      { mapping: { ...this.state.mapping, [source]: target } },
+      {
+        mapping: {
+          ...this.state.mapping,
+          [source]: { targetField: targetField }
+        }
+      },
       () => this.props.onChange(this.state.mapping)
     );
   };

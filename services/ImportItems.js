@@ -9,7 +9,7 @@ const mapFields = (item, fieldMapping) => {
   const importedItem = {};
 
   Object.keys(fieldMapping).forEach(sourceField => {
-    const targetField = fieldMapping[sourceField];
+    const { targetField } = fieldMapping[sourceField];
 
     importedItem[targetField] = item[sourceField];
   });
