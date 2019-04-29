@@ -1,21 +1,10 @@
 'use strict';
 const fileUtils = require('./utils/fileUtils');
+const importField = require('./utils/importField');
 
 const queues = {};
 
 const IMPORT_THROTTLE = 100;
-
-const mapFields = (item, fieldMapping) => {
-  const importedItem = {};
-
-  Object.keys(fieldMapping).forEach(sourceField => {
-    const { targetField } = fieldMapping[sourceField];
-
-    importedItem[targetField] = item[sourceField];
-  });
-
-  return importedItem;
-};
 
 const importNextItem = async importConfig => {
   const item = queues[importConfig.id].shift();
@@ -29,7 +18,7 @@ const importNextItem = async importConfig => {
     return;
   }
 
-  const importedItem = mapFields(item, importConfig.fieldMapping);
+  const importedItem = importField(item, importConfig.fieldMapping);
 
   const savedContent = await strapi.models[importConfig.contentType]
     .forge(importedItem)

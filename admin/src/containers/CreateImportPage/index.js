@@ -92,7 +92,7 @@ export class CreateImportPage extends Component {
       contentType: this.state.selectedName,
       fieldMapping: removeNones(this.state.fieldMapping)
     };
-    console.log(importConfig);
+
     this.props.saveImportConfig(importConfig);
   };
 
