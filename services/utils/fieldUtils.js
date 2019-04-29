@@ -33,7 +33,7 @@ const compileStatsForFieldData = fieldData => {
   const stats = {};
 
   try {
-    const urls = getUrls(fieldData);
+    const urls = Array.from(getUrls(fieldData));
 
     const l = urls.length;
     for (let i = 0; i < l; ++i) {

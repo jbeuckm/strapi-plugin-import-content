@@ -47,6 +47,8 @@ const analyze = items => {
       console.log(e);
     }
 
+    fieldStat.hasImageUrls = fieldAnalysis.some(fa => Boolean(fa.hasImageUrls));
+
     const lengths = _.map(fieldAnalysis, 'length');
 
     fieldStat.minLength = ss.min(lengths);
