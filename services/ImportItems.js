@@ -1,6 +1,6 @@
 'use strict';
 const fileUtils = require('./utils/fileUtils');
-const importField = require('./utils/importField');
+const importFields = require('./utils/importFields');
 
 const queues = {};
 
@@ -18,7 +18,7 @@ const importNextItem = async importConfig => {
     return;
   }
 
-  const importedItem = importField(item, importConfig.fieldMapping);
+  const importedItem = importFields(item, importConfig.fieldMapping);
 
   const savedContent = await strapi.models[importConfig.contentType]
     .forge(importedItem)

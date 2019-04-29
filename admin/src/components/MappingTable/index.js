@@ -1,19 +1,28 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import MappingOptions from './MappingOptions';
+import _ from 'lodash';
 
 class MappingTable extends Component {
   state = { mapping: {} };
 
+  changeMappingOptions = stat => options => {
+    console.log(stat, options);
+
+    let state = this.state;
+    for (let key in options) {
+      state = _.set(state, `mapping[${stat.fieldName}][${key}]`, options[key]);
+    }
+    this.setState(state, () => this.props.onChange(this.state.mapping));
+  };
+
   setMapping = (source, targetField) => {
-    this.setState(
-      {
-        mapping: {
-          ...this.state.mapping,
-          [source]: { targetField: targetField }
-        }
-      },
-      () => this.props.onChange(this.state.mapping)
+    const state = _.set(
+      this.state,
+      `mapping[${source}]['targetField']`,
+      targetField
     );
+    this.setState(state, () => this.props.onChange(this.state.mapping));
   };
 
   render() {
@@ -30,6 +39,7 @@ class MappingTable extends Component {
               <th>Min Length</th>
               <th>Max Length</th>
               <th>Avg Length</th>
+              <th>Options</th>
               <th>Destination</th>
             </tr>
             {analysis.fieldStats.map(stat => (
@@ -40,6 +50,12 @@ class MappingTable extends Component {
                 <td>{stat.minLength}</td>
                 <td>{stat.maxLength}</td>
                 <td>{stat.meanLength}</td>
+                <td>
+                  <MappingOptions
+                    stat={stat}
+                    onChange={this.changeMappingOptions(stat)}
+                  />
+                </td>
                 <td>
                   {targetModel && (
                     <select

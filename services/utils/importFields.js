@@ -1,12 +1,12 @@
 const striptags = require('striptags');
 
-const importField = (item, fieldMapping) => {
+const importFields = (sourceItem, fieldMapping) => {
   const importedItem = {};
 
   Object.keys(fieldMapping).forEach(sourceField => {
     const { targetField, stripTags } = fieldMapping[sourceField];
 
-    const originalValue = item[sourceField];
+    const originalValue = sourceItem[sourceField];
 
     importedItem[targetField] = stripTags
       ? striptags(originalValue)
@@ -16,4 +16,4 @@ const importField = (item, fieldMapping) => {
   return importedItem;
 };
 
-module.exports = importField;
+module.exports = importFields;
