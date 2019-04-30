@@ -32,18 +32,20 @@ const detectFieldFormat = data => {
 const compileStatsForFieldData = fieldData => {
   const stats = {};
 
-  try {
-    const urls = Array.from(getUrls(fieldData));
+  if (typeof fieldData === 'string') {
+    try {
+      const urls = Array.from(getUrls(fieldData));
 
-    const l = urls.length;
-    for (let i = 0; i < l; ++i) {
-      if (guessIsUrlImage(urls[i])) {
-        stats.hasImageUrls = true;
-        break;
+      const l = urls.length;
+      for (let i = 0; i < l; ++i) {
+        if (guessIsUrlImage(urls[i])) {
+          stats.hasImageUrls = true;
+          break;
+        }
       }
+    } catch (e) {
+      console.log(e);
     }
-  } catch (e) {
-    console.log(e);
   }
 
   stats.length = fieldData.length;

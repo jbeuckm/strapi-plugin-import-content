@@ -24,7 +24,9 @@ const analyze = items => {
 
   items.forEach(item => {
     fieldNames.forEach(fieldName => {
-      fieldAnalyses[fieldName].push(compileStatsForFieldData(item[fieldName]));
+      const fieldData = item[fieldName];
+      const fieldStats = compileStatsForFieldData(fieldData);
+      fieldAnalyses[fieldName].push(fieldStats);
     });
   });
 
