@@ -16,7 +16,7 @@ const getFieldNameSet = items => {
   return fieldNames;
 };
 
-const analyze = items => {
+const analyze = (sourceType, items) => {
   const fieldNames = getFieldNameSet(items);
 
   const fieldAnalyses = {};
@@ -25,7 +25,10 @@ const analyze = items => {
   items.forEach(item => {
     fieldNames.forEach(fieldName => {
       const fieldData = item[fieldName];
-      const fieldStats = compileStatsForFieldData(fieldData);
+      const fieldStats = compileStatsForFieldData(
+        { sourceType, fieldName },
+        fieldData
+      );
       fieldAnalyses[fieldName].push(fieldStats);
     });
   });

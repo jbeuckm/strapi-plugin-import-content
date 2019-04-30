@@ -6,12 +6,22 @@ const MappingOptions = ({ stat, onChange }) => {
     case 'xml':
       return (
         <div>
-          <label>strip tags</label>
-          <input
-            style={{ paddingLeft: 10 }}
-            type="checkbox"
-            onChange={e => onChange({ stripTags: e.target.checked })}
-          />
+          <div>
+            <label style={{ marginRight: 10 }}>strip tags</label>
+            <input
+              type="checkbox"
+              onChange={e => onChange({ stripTags: e.target.checked })}
+            />
+          </div>
+          {stat.hasImageUrls && (
+            <div>
+              <label style={{ marginRight: 10 }}>import media</label>
+              <input
+                type="checkbox"
+                onChange={e => onChange({ importMedia: e.target.checked })}
+              />
+            </div>
+          )}
         </div>
       );
 

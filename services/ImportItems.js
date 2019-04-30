@@ -18,7 +18,7 @@ const importNextItem = async importConfig => {
     return;
   }
 
-  const importedItem = importFields(item, importConfig.fieldMapping);
+  const importedItem = await importFields(item, importConfig.fieldMapping);
 
   const savedContent = await strapi.models[importConfig.contentType]
     .forge(importedItem)

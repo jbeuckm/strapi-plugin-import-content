@@ -29,7 +29,7 @@ const detectFieldFormat = data => {
   }
 };
 
-const compileStatsForFieldData = fieldData => {
+const compileStatsForFieldData = ({ sourceType, fieldName }, fieldData) => {
   const stats = {};
 
   if (typeof fieldData === 'string') {
@@ -46,6 +46,8 @@ const compileStatsForFieldData = fieldData => {
     } catch (e) {
       console.log(e);
     }
+  } else {
+    console.log(typeof fieldData, fieldData);
   }
 
   stats.length = fieldData.length;

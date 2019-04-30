@@ -8,7 +8,7 @@ module.exports = {
       body
     });
 
-    const analysis = analyzer.analyze(items);
+    const analysis = analyzer.analyze(sourceType, items);
 
     return { sourceType, ...analysis };
   }
