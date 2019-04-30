@@ -1,14 +1,15 @@
 'use strict';
 const fileUtils = require('./utils/fileUtils');
 const importFields = require('./utils/importFields');
+const importMediaFiles = require('./utils/importMediaFiles');
 
 const queues = {};
 
 const IMPORT_THROTTLE = 100;
 
 const importNextItem = async importConfig => {
-  const item = queues[importConfig.id].shift();
-  if (!item) {
+  const sourceItem = queues[importConfig.id].shift();
+  if (!sourceItem) {
     console.log('import complete');
 
     await strapi
@@ -18,11 +19,20 @@ const importNextItem = async importConfig => {
     return;
   }
 
-  const importedItem = await importFields(item, importConfig.fieldMapping);
+  const importedItem = await importFields(
+    sourceItem,
+    importConfig.fieldMapping
+  );
 
   const savedContent = await strapi.models[importConfig.contentType]
     .forge(importedItem)
     .save();
+
+  const mediaFiles = await importMediaFiles(
+    savedContent,
+    sourceItem,
+    importConfig
+  );
 
   await strapi.query('importeditem', 'import-content').create({
     importconfig: importConfig.id,
