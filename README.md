@@ -8,8 +8,14 @@ Import RSS items to your content type with Strapi.
 
 ```
 cd my-strapi-project/plugins
-npm i strapi-plugin-import-content import-content
+git clone https://github.com/jbeuckm/strapi-plugin-import-content.git import-content
+cd ..
+npm run setup --plugins
 ```
+
+_\* the last step takes a notoriously long time..._
+
+### Usage
 
 Click for video demo:
 [![Click for demo video](video_thumbnail.png)](https://youtu.be/NOFioYMKPJk)
