@@ -1,6 +1,6 @@
 'use strict';
 const request = require('request');
-const Joi = require('joi');
+const validateUrl = require('./utils/validateUrl');
 
 /*
  * Get the file data from the URL in the query.
@@ -8,10 +8,7 @@ const Joi = require('joi');
  */
 const getDataFromUrl = url => {
   return new Promise((resolve, reject) => {
-    const schema = Joi.string().uri();
-
-    const { error } = Joi.validate(url, schema);
-    error && reject(error);
+    if (!validateUrl(url)) return reject('invalid URL');
 
     request(url, null, async (err, res, body) => {
       if (err) {

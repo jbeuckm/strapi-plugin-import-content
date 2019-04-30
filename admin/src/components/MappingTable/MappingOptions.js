@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 const MappingOptions = ({ stat, onChange }) => {
+  console.log({ stat });
   switch (stat.format) {
     case 'xml':
       return (
