@@ -5,6 +5,9 @@ const importFields = async (sourceItem, fieldMapping) => {
 
   Object.keys(fieldMapping).forEach(async sourceField => {
     const { targetField, stripTags } = fieldMapping[sourceField];
+    if (!targetField || targetField === 'none') {
+      return;
+    }
 
     const originalValue = sourceItem[sourceField];
 

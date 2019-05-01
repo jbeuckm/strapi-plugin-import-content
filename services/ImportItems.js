@@ -28,11 +28,7 @@ const importNextItem = async importConfig => {
     .forge(importedItem)
     .save();
 
-  const mediaFiles = await importMediaFiles(
-    savedContent,
-    sourceItem,
-    importConfig
-  );
+  await importMediaFiles(savedContent, sourceItem, importConfig);
 
   await strapi.query('importeditem', 'import-content').create({
     importconfig: importConfig.id,

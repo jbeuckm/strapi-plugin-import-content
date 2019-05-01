@@ -90,7 +90,7 @@ export class CreateImportPage extends Component {
     const importConfig = {
       url: this.state.url,
       contentType: this.state.selectedName,
-      fieldMapping: removeNones(this.state.fieldMapping)
+      fieldMapping: this.state.fieldMapping
     };
 
     this.props.saveImportConfig(importConfig);
