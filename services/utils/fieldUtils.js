@@ -23,6 +23,9 @@ const detectFieldFormat = data => {
     case 'boolean':
       return 'boolean';
 
+    case 'object':
+      return 'object';
+
     case 'string':
       return detectStringFieldFormat(data);
   }
@@ -53,6 +56,7 @@ const compileStatsForFieldData = fieldData => {
       if (urlIsMedia(fieldData.url)) {
         stats.hasMediaUrls = true;
       }
+      stats.length = JSON.stringify(fieldData).length;
       break;
 
     default:

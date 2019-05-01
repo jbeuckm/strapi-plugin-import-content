@@ -2,35 +2,30 @@ import React, { Component } from 'react';
 import TargetFieldSelect from './TargetFieldSelect';
 
 const MappingOptions = ({ stat, onChange, targetModel }) => {
-  console.log({ stat });
-  switch (stat.format) {
-    case 'xml':
-      return (
+  return (
+    <div>
+      {stat.format === 'xml' && (
         <div>
-          <div>
-            <label style={{ marginRight: 10 }}>strip tags</label>
-            <input
-              type="checkbox"
-              onChange={e => onChange({ stripTags: e.target.checked })}
-            />
-          </div>
-          {stat.hasMediaUrls && (
-            <div>
-              <label style={{ marginRight: 10 }}>import media to field</label>
-              <TargetFieldSelect
-                targetModel={targetModel}
-                onChange={targetField =>
-                  onChange({ importMediaToField: targetField })
-                }
-              />
-            </div>
-          )}
+          <label style={{ marginRight: 10 }}>strip tags</label>
+          <input
+            type="checkbox"
+            onChange={e => onChange({ stripTags: e.target.checked })}
+          />
         </div>
-      );
-
-    default:
-      return null;
-  }
+      )}
+      {stat.hasMediaUrls && (
+        <div>
+          <label style={{ marginRight: 10 }}>import media to field</label>
+          <TargetFieldSelect
+            targetModel={targetModel}
+            onChange={targetField =>
+              onChange({ importMediaToField: targetField })
+            }
+          />
+        </div>
+      )}
+    </div>
+  );
 };
 
 export default MappingOptions;
