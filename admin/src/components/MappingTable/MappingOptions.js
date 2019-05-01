@@ -14,7 +14,7 @@ const MappingOptions = ({ stat, onChange, targetModel }) => {
               onChange={e => onChange({ stripTags: e.target.checked })}
             />
           </div>
-          {stat.hasImageUrls && (
+          {stat.hasMediaUrls && (
             <div>
               <label style={{ marginRight: 10 }}>import media to field</label>
               <TargetFieldSelect

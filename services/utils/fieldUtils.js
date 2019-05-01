@@ -1,5 +1,5 @@
 const getUrls = require('get-urls');
-const guessIsUrlImage = require('./guessIsUrlImage');
+const urlIsMedia = require('./urlIsMedia');
 const striptags = require('striptags');
 
 const EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -32,25 +32,34 @@ const detectFieldFormat = data => {
 const compileStatsForFieldData = ({ sourceType, fieldName }, fieldData) => {
   const stats = {};
 
-  if (typeof fieldData === 'string') {
-    try {
-      const urls = Array.from(getUrls(fieldData));
+  switch (typeof fieldData) {
+    case 'string':
+      try {
+        const urls = Array.from(getUrls(fieldData));
 
-      const l = urls.length;
-      for (let i = 0; i < l; ++i) {
-        if (guessIsUrlImage(urls[i])) {
-          stats.hasImageUrls = true;
-          break;
+        const l = urls.length;
+        for (let i = 0; i < l; ++i) {
+          if (urlIsMedia(urls[i])) {
+            stats.hasMediaUrls = true;
+            break;
+          }
         }
+      } catch (e) {
+        console.log(e);
       }
-    } catch (e) {
-      console.log(e);
-    }
-  } else {
-    console.log(typeof fieldData, fieldData);
+      stats.length = fieldData.length;
+      break;
+
+    case 'object':
+      if (urlIsMedia(fieldData.url)) {
+        stats.hasMediaUrls = true;
+      }
+      break;
+
+    default:
+      console.log(typeof fieldData, fieldData);
   }
 
-  stats.length = fieldData.length;
   stats.format = detectFieldFormat(fieldData);
 
   return stats;

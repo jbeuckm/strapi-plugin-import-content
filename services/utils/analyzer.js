@@ -52,7 +52,7 @@ const analyze = (sourceType, items) => {
       console.log(e);
     }
 
-    fieldStat.hasImageUrls = fieldAnalysis.some(fa => Boolean(fa.hasImageUrls));
+    fieldStat.hasMediaUrls = fieldAnalysis.some(fa => Boolean(fa.hasMediaUrls));
 
     const lengths = _.map(fieldAnalysis, 'length');
 

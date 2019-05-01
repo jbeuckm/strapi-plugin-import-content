@@ -1,4 +1,4 @@
-const guessIsUrlImage = url => {
+const urlIsMedia = url => {
   const parsed = new URL(url);
 
   const extension = parsed.pathname
@@ -11,6 +11,19 @@ const guessIsUrlImage = url => {
     case 'gif':
     case 'jpg':
     case 'jpeg':
+    case 'svg':
+    case 'bmp':
+    case 'tif':
+    case 'tiff':
+      return true;
+
+    case 'mp3':
+    case 'wav':
+    case 'ogg':
+      return true;
+
+    case 'mp4':
+    case 'avi':
       return true;
 
     default:
@@ -18,4 +31,4 @@ const guessIsUrlImage = url => {
   }
 };
 
-module.exports = guessIsUrlImage;
+module.exports = urlIsMedia;

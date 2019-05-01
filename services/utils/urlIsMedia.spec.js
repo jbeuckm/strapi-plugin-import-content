@@ -1,6 +1,6 @@
-const guessIsUrlImage = require('./guessIsUrlImage');
+const urlIsMedia = require('./urlIsMedia');
 
-describe('guessIsUrlImage', () => {
+describe('urlIsMedia', () => {
   it('returns true for image urls', () => {
     const URLS = [
       'http://site.com/image.gif',
@@ -11,7 +11,7 @@ describe('guessIsUrlImage', () => {
     ];
 
     URLS.forEach(url => {
-      expect(guessIsUrlImage(url)).toBeTruthy();
+      expect(urlIsMedia(url)).toBeTruthy();
     });
   });
 
@@ -23,7 +23,7 @@ describe('guessIsUrlImage', () => {
     ];
 
     URLS.forEach(url => {
-      expect(guessIsUrlImage(url)).toBeFalsy();
+      expect(urlIsMedia(url)).toBeFalsy();
     });
   });
 });

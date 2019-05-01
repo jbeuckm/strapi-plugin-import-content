@@ -1,8 +1,7 @@
-const getUrls = require('get-urls');
-const guessIsUrlImage = require('./guessIsUrlImage');
 const request = require('request');
 const getUploadProvider = require('./getUploadProvider');
 const fileFromBuffer = require('./fileFromBuffer');
+const getMediaUrlsFromFieldData = require('./getMediaUrlsFromFieldData');
 
 const importMediaFile = url =>
   new Promise((resolve, reject) => {
@@ -40,8 +39,7 @@ const importMediaFiles = async (savedContent, sourceItem, importConfig) => {
     const { importMediaToField } = fieldMapping[sourceField];
 
     if (importMediaToField) {
-      const originalValue = sourceItem[sourceField];
-      const urls = Array.from(getUrls(originalValue)).filter(guessIsUrlImage);
+      const urls = getMediaUrlsFromFieldData(sourceItem[sourceField]);
 
       const promises = urls.map(importMediaFile);
 
