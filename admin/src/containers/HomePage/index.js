@@ -82,20 +82,20 @@ export class HomePage extends Component {
                     <td>{item.importedCount}</td>
                     <td>
                       <IcoContainer
-                        icons={
-                          item.ongoing
-                            ? [{ icoType: 'spinner' }]
-                            : [
-                              {
+                        icons={[
+                          ...[
+                            item.ongoing
+                              ? { icoType: 'spinner' }
+                              : {
                                 icoType: 'undo',
                                 onClick: this.undoImport(item.id)
-                              },
-                              {
-                                icoType: 'trash',
-                                onClick: this.deleteImport(item.id)
                               }
-                            ]
-                        }
+                          ],
+                          {
+                            icoType: 'trash',
+                            onClick: this.deleteImport(item.id)
+                          }
+                        ]}
                       />
                     </td>
                   </tr>

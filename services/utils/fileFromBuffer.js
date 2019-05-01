@@ -19,7 +19,7 @@ const fileFromBuffer = (mimeType, extension, buffer) => {
     sha256: niceHash(buffer),
     hash: fid.replace(/-/g, ''),
 
-    name: fid,
+    name: `${fid}.${extension}`,
     ext: `.${extension}`,
     mime: mimeType,
     size: (buffer.length / 1000).toFixed(2)
