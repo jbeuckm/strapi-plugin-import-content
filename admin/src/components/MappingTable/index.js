@@ -53,6 +53,7 @@ class MappingTable extends Component {
                 <td>{stat.meanLength}</td>
                 <td>
                   <MappingOptions
+                    targetModel={targetModel}
                     stat={stat}
                     onChange={this.changeMappingOptions(stat)}
                   />

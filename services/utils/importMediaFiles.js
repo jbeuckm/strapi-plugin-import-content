@@ -37,9 +37,9 @@ const importMediaFiles = async (savedContent, sourceItem, importConfig) => {
   const { fieldMapping, contentType } = importConfig;
 
   Object.keys(fieldMapping).forEach(async sourceField => {
-    const { targetField, importMedia } = fieldMapping[sourceField];
+    const { importMediaToField } = fieldMapping[sourceField];
 
-    if (importMedia) {
+    if (importMediaToField) {
       const originalValue = sourceItem[sourceField];
       const urls = Array.from(getUrls(originalValue)).filter(guessIsUrlImage);
 
@@ -53,7 +53,7 @@ const importMediaFiles = async (savedContent, sourceItem, importConfig) => {
             refId: savedContent.id,
             ref: contentType,
             source: 'content-manager',
-            field: 'files'
+            field: importMediaToField
           }
         ];
 

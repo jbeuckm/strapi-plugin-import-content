@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+import TargetFieldSelect from './TargetFieldSelect';
 
-const MappingOptions = ({ stat, onChange }) => {
+const MappingOptions = ({ stat, onChange, targetModel }) => {
   console.log({ stat });
   switch (stat.format) {
     case 'xml':
@@ -15,10 +16,12 @@ const MappingOptions = ({ stat, onChange }) => {
           </div>
           {stat.hasImageUrls && (
             <div>
-              <label style={{ marginRight: 10 }}>import media</label>
-              <input
-                type="checkbox"
-                onChange={e => onChange({ importMedia: e.target.checked })}
+              <label style={{ marginRight: 10 }}>import media to field</label>
+              <TargetFieldSelect
+                targetModel={targetModel}
+                onChange={targetField =>
+                  onChange({ importMediaToField: targetField })
+                }
               />
             </div>
           )}
