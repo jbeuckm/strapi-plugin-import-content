@@ -1,6 +1,6 @@
 {
   "name": "strapi-plugin-import-content",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Import RSS etc. into Strapi.",
   "repository": {
     "type": "git",
