@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import MappingOptions from './MappingOptions';
+import TargetFieldSelect from './TargetFieldSelect';
 import _ from 'lodash';
 
 class MappingTable extends Component {
@@ -9,11 +10,11 @@ class MappingTable extends Component {
   changeMappingOptions = stat => options => {
     console.log(stat, options);
 
-    let state = this.state;
+    let newState = _.cloneDeep(this.state);
     for (let key in options) {
-      state = _.set(state, `mapping[${stat.fieldName}][${key}]`, options[key]);
+      _.set(newState, `mapping[${stat.fieldName}][${key}]`, options[key]);
     }
-    this.setState(state, () => this.props.onChange(this.state.mapping));
+    this.setState(newState, () => this.props.onChange(this.state.mapping));
   };
 
   setMapping = (source, targetField) => {
@@ -58,22 +59,12 @@ class MappingTable extends Component {
                 </td>
                 <td>
                   {targetModel && (
-                    <select
-                      onChange={event =>
-                        this.setMapping(stat.fieldName, event.target.value)
+                    <TargetFieldSelect
+                      targetModel={targetModel}
+                      onChange={targetField =>
+                        this.setMapping(stat.fieldName, targetField)
                       }
-                    >
-                      <option value="none">(none)</option>
-                      {targetModel &&
-                        targetModel.attributes.map(attribute => {
-                          const type = attribute.params.type;
-                          return type ? (
-                            <option value={attribute.name}>
-                              {attribute.name} ({type})
-                            </option>
-                          ) : null;
-                        })}
-                    </select>
+                    />
                   )}
                 </td>
               </tr>
