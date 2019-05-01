@@ -31,4 +31,11 @@ describe('detectFieldFormat', () => {
   });
 });
 
-describe('compileStatsForField', () => {});
+describe('compileStatsForFieldData', () => {
+  it('returns an object', () => {
+    const stringData = 'hello http://website';
+    const stats = fieldUtils.compileStatsForFieldData(stringData);
+    expect(stats.length).toEqual(stringData.length);
+    expect(stats.format).toEqual('string');
+  });
+});

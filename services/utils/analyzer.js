@@ -25,10 +25,7 @@ const analyze = (sourceType, items) => {
   items.forEach(item => {
     fieldNames.forEach(fieldName => {
       const fieldData = item[fieldName];
-      const fieldStats = compileStatsForFieldData(
-        { sourceType, fieldName },
-        fieldData
-      );
+      const fieldStats = compileStatsForFieldData(fieldData);
       fieldAnalyses[fieldName].push(fieldStats);
     });
   });

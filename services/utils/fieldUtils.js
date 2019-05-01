@@ -1,13 +1,12 @@
 const getUrls = require('get-urls');
 const urlIsMedia = require('./urlIsMedia');
 const striptags = require('striptags');
-
-const EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+const stringIsEmail = require('./stringIsEmail');
 
 const detectStringFieldFormat = data => {
   if (new Date(data).toString() !== 'Invalid Date') return 'date';
 
-  if (EMAIL_REGEXP.test(data)) return 'email';
+  if (stringIsEmail(data)) return 'email';
 
   if (data.length !== striptags(data).length) {
     return 'xml';
@@ -29,7 +28,7 @@ const detectFieldFormat = data => {
   }
 };
 
-const compileStatsForFieldData = ({ sourceType, fieldName }, fieldData) => {
+const compileStatsForFieldData = fieldData => {
   const stats = {};
 
   switch (typeof fieldData) {
