@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const request = require('request');
 const getUploadProvider = require('./getUploadProvider');
 const fileFromBuffer = require('./fileFromBuffer');
@@ -41,7 +42,7 @@ const importMediaFiles = async (savedContent, sourceItem, importConfig) => {
     if (importMediaToField) {
       const urls = getMediaUrlsFromFieldData(sourceItem[sourceField]);
 
-      const promises = urls.map(importMediaFile);
+      const promises = _.uniq(urls).map(importMediaFile);
 
       const fileDescriptors = await Promise.all(promises);
 
