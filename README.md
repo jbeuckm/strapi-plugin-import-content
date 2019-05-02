@@ -16,6 +16,16 @@ npm run setup --plugins
 
 _\* the last step takes a notoriously long time..._
 
+### Configuration
+
+When plugin has been installed, you need to allow access to the endpoints.
+
+1.  Navigate to Users & Permissions.
+2.  Pick the role you would like to give permission.
+3.  Scroll down and expand the section **Import Content**.
+4.  Check "Select All" for the endpoints under "Importconfig".
+5.  Scroll up and press "Save"
+
 ### Usage
 
 Click for video demo:
