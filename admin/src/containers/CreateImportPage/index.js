@@ -20,7 +20,6 @@ import {
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
-import { removeNones } from './utils';
 
 export class CreateImportPage extends Component {
   constructor(props) {
@@ -117,7 +116,7 @@ export class CreateImportPage extends Component {
               onChange={this.preAnalyzeImportFile}
               disabled={loadingAnalysis}
             />
-            {loadingAnalysis && <p>Loading...</p>}
+            {loadingAnalysis && <p>Analyzing...</p>}
           </div>
         </div>
 
