@@ -49,6 +49,15 @@ export class HomePage extends Component {
     this.props.undoImport(id);
   };
 
+  getSourceText = item => {
+    switch (item.source) {
+      case 'upload':
+        return item.options.filename;
+      case 'url':
+        return item.options.url;
+    }
+  };
+
   render() {
     const { importConfigs } = this.props;
 
@@ -63,7 +72,7 @@ export class HomePage extends Component {
         <table>
           <thead>
             <tr>
-              <th>URL</th>
+              <th>Source</th>
               <th>Content Type</th>
               <th>Updated</th>
               <th>Items</th>
@@ -76,7 +85,7 @@ export class HomePage extends Component {
 
                 return (
                   <tr className={item.ongoing ? styles.inProgress : null}>
-                    <td>{item.url}</td>
+                    <td>{this.getSourceText(item)}</td>
                     <td>{item.contentType}</td>
                     <td>{updatedAt.fromNow()}</td>
                     <td>{item.importedCount}</td>

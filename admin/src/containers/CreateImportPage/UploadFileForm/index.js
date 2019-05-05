@@ -4,6 +4,7 @@ import { injectIntl } from 'react-intl';
 
 import Button from 'components/Button';
 import Label from 'components/Label';
+import InputSpacer from 'components/InputSpacer';
 
 function readFileContent(file) {
   const reader = new FileReader();
@@ -20,14 +21,24 @@ export class UploadFileForm extends Component {
     file: null,
     type: null,
     options: {
-      delimiter: ','
+      delimiter: ',',
+      filename: null
     }
   };
 
   onChangeImportFile = event => {
     const file = event.target.files[0];
 
-    this.setState({ file, type: file.type });
+    console.log({ file });
+
+    this.setState({
+      file,
+      type: file.type,
+      options: {
+        ...this.state.options,
+        filename: file.name
+      }
+    });
   };
 
   clickAnalyzeUploadFile = async () => {
@@ -56,6 +67,7 @@ export class UploadFileForm extends Component {
     return (
       <Fragment>
         <input type="file" accept=".csv" onChange={this.onChangeImportFile} />
+        <InputSpacer />
         <div>
           {type === 'text/csv' && (
             <Fragment>
