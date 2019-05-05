@@ -2,10 +2,11 @@
 const fileUtils = require('./utils/fileUtils');
 const analyzer = require('./utils/analyzer');
 module.exports = {
-  preAnalyzeImportFile: async ({ contentType, body }) => {
+  preAnalyzeImportFile: async ({ contentType, body, options }) => {
     const { sourceType, items } = await fileUtils.getItemsForFileData({
       contentType,
-      body
+      body,
+      options
     });
 
     const analysis = analyzer.analyze(sourceType, items);

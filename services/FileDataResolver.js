@@ -17,15 +17,18 @@ const getDataFromUrl = url => {
 };
 
 module.exports = {
-  resolveFileDataFromRequest: ctx => {
-    const { source, url, data } = ctx.request.body;
+  resolveFileDataFromRequest: async ctx => {
+    const { source, type, options, data } = ctx.request.body;
 
-    console.log({ source, url, data });
+    console.log({ source, options, type, data });
 
     switch (source) {
       case 'upload':
+        return { contentType: type, body: data, options };
+
       case 'url':
-        return getDataFromUrl(url);
+        const { contentType, body } = await getDataFromUrl(options.url);
+        return { contentType, body, options };
     }
   },
   getDataFromUrl

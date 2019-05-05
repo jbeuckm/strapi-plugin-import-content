@@ -14,17 +14,22 @@ module.exports = {
   },
 
   create: async ctx => {
+    const services = strapi.plugins['import-content'].services;
     const importConfig = ctx.request.body;
-    console.log('create', importConfig.fieldMapping);
+    console.log('create', importConfig);
     importConfig.ongoing = true;
 
-    const entry = await strapi
+    const record = await strapi
       .query('importconfig', 'import-content')
       .create(importConfig);
 
-    ctx.send(entry);
+    ctx.send(record);
 
-    strapi.plugins['import-content'].services['importitems'].importItems(entry);
+    const { contentType, body } = await services[
+      'filedataresolver'
+    ].resolveFileDataFromRequest(ctx);
+
+    services['importitems'].importItems(record, { contentType, body });
   },
 
   undo: async ctx => {
@@ -56,14 +61,15 @@ module.exports = {
   preAnalyzeImportFile: async ctx => {
     const services = strapi.plugins['import-content'].services;
 
-    const { contentType, body } = await services[
+    const { contentType, body, options } = await services[
       'filedataresolver'
     ].resolveFileDataFromRequest(ctx);
 
     try {
       const data = await services['importconfig'].preAnalyzeImportFile({
         contentType,
-        body
+        body,
+        options
       });
 
       ctx.send(data);

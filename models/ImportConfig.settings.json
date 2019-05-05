@@ -12,8 +12,11 @@
     "date": {
       "type": "date"
     },
-    "url": {
+    "source": {
       "type": "string"
+    },
+    "options": {
+      "type": "json"
     },
     "contentType": {
       "type": "string"

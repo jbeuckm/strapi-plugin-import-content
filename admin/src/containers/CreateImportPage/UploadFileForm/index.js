@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
 
 import Button from 'components/Button';
+import Label from 'components/Label';
 
 function readFileContent(file) {
   const reader = new FileReader();
@@ -15,34 +16,70 @@ function readFileContent(file) {
 
 export class UploadFileForm extends Component {
   state = {
-    file: null
+    source: 'url',
+    file: null,
+    type: null,
+    options: {
+      delimiter: ','
+    }
   };
 
   onChangeImportFile = event => {
     const file = event.target.files[0];
 
-    this.setState({ file });
+    this.setState({ file, type: file.type });
   };
 
   clickAnalyzeUploadFile = async () => {
-    const data = await readFileContent(this.state.file);
+    const { file, options } = this.state;
 
-    this.props.onRequestAnalysis({ source: 'upload', data });
+    const data = await readFileContent(file);
+
+    this.props.onRequestAnalysis({
+      source: 'upload',
+      type: file.type,
+      options,
+      data
+    });
+  };
+
+  onChangeOption = option => event => {
+    this.setState({
+      options: { ...this.state.options, [option]: event.target.value }
+    });
   };
 
   render() {
     const { loadingAnalysis } = this.props;
+    const { type, options } = this.state;
 
     return (
       <Fragment>
         <input type="file" accept=".csv" onChange={this.onChangeImportFile} />
-
-        <Button
-          label={'Analyze'}
-          onClick={this.clickAnalyzeUploadFile}
-          secondaryHotline
-          loading={loadingAnalysis}
-        />
+        <div>
+          {type === 'text/csv' && (
+            <Fragment>
+              <Label message="delimiter:" />
+              <input
+                onChange={this.onChangeOption('delimiter')}
+                value={options.delimiter}
+                style={{
+                  backgroundColor: '#fff',
+                  marginLeft: 10,
+                  width: 30,
+                  paddingLeft: 7,
+                  paddingRight: 7
+                }}
+              />
+            </Fragment>
+          )}
+          <Button
+            label={'Analyze'}
+            onClick={this.clickAnalyzeUploadFile}
+            secondaryHotline
+            loading={loadingAnalysis}
+          />
+        </div>
       </Fragment>
     );
   }

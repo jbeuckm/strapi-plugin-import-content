@@ -13,7 +13,7 @@ export class ExternalUrlForm extends Component {
   preAnalyzeImportFile = async event => {
     const url = event.target.value;
 
-    this.props.onRequestAnalysis({ source: 'url', url });
+    this.props.onRequestAnalysis({ source: 'url', options: { url } });
   };
 
   render() {

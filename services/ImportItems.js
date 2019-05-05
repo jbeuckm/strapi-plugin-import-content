@@ -47,21 +47,16 @@ const importNextItem = async importConfig => {
 };
 
 module.exports = {
-  importItems: importConfig =>
+  importItems: (importConfig, { contentType, body }) =>
     new Promise(async (resolve, reject) => {
       const importConfigRecord = importConfig.attributes;
       console.log('importitems', importConfigRecord);
 
-      const url = importConfigRecord.url;
-
       try {
-        const { contentType, body } = await strapi.plugins[
-          'import-content'
-        ].services['filedataresolver'].getDataFromUrl(url);
-
         const { items } = await fileUtils.getItemsForFileData({
           contentType,
-          body
+          body,
+          options: importConfigRecord.options
         });
 
         queues[importConfigRecord.id] = items;
