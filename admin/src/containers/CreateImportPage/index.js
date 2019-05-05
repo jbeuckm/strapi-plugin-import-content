@@ -8,6 +8,12 @@ import pluginId from 'pluginId';
 
 import Button from 'components/Button';
 import PluginHeader from 'components/PluginHeader';
+import InputSelect from 'components/InputSelect';
+import InputSpacer from 'components/InputSpacer';
+import Label from 'components/Label';
+
+import ExternalUrlForm from './ExternalUrlForm';
+import UploadFileForm from './UploadFileForm';
 import MappingTable from '../../components/MappingTable';
 
 import styles from './styles.scss';
@@ -22,9 +28,15 @@ import reducer from './reducer';
 import saga from './saga';
 
 export class CreateImportPage extends Component {
+  importSources = [
+    { label: 'External URL', value: 'url' },
+    { label: 'Upload file', value: 'upload' }
+  ];
+
   constructor(props) {
     super(props);
     this.state = {
+      importSource: 'url',
       url: null,
       analysis: null,
       loadingAnalysis: false,
@@ -48,14 +60,10 @@ export class CreateImportPage extends Component {
     }
   }
 
-  preAnalyzeImportFile = async event => {
-    const url = event.target.value;
-
-    this.setState({ url, fieldMapping: {}, loadingAnalysis: true });
+  onRequestAnalysis = async requestPromise => {
+    this.setState({ loadingAnalysis: true });
     try {
-      const response = await fetch(
-        `/import-content/preAnalyzeImportFile?url=${url}`
-      );
+      const response = await requestPromise;
 
       const json = await response.json();
 
@@ -95,9 +103,18 @@ export class CreateImportPage extends Component {
     this.props.saveImportConfig(importConfig);
   };
 
+  selectImportSource = event => {
+    this.setState({ importSource: event.target.value, analysis: null });
+  };
+
   render() {
     const { models, loading, saving } = this.props;
-    const { loadingAnalysis, analysis, fieldMapping } = this.state;
+    const {
+      importSource,
+      loadingAnalysis,
+      analysis,
+      fieldMapping
+    } = this.state;
 
     const saveDisabled = loading || saving || fieldMapping === {};
 
@@ -110,13 +127,29 @@ export class CreateImportPage extends Component {
 
         <div className="row">
           <div className="col-md-12">
-            Import from this URL:
-            <input
-              className={styles.urlInput}
-              onChange={this.preAnalyzeImportFile}
-              disabled={loadingAnalysis}
+            <Label message="Import from..." />
+            <InputSelect
+              selectOptions={this.importSources}
+              value={importSource}
+              onChange={this.selectImportSource}
             />
+            <InputSpacer />
+            {importSource === 'upload' && (
+              <UploadFileForm
+                onRequestAnalysis={this.onRequestAnalysis}
+                loadingAnalysis={loadingAnalysis}
+              />
+            )}
+
+            {importSource === 'url' && (
+              <ExternalUrlForm
+                onRequestAnalysis={this.onRequestAnalysis}
+                loadingAnalysis={loadingAnalysis}
+              />
+            )}
+
             {loadingAnalysis && <p>Analyzing...</p>}
+            <InputSpacer />
           </div>
         </div>
 
@@ -133,6 +166,8 @@ export class CreateImportPage extends Component {
                 </select>
               </Fragment>
             )}
+
+            <InputSpacer />
           </div>
         </div>
 
@@ -146,9 +181,11 @@ export class CreateImportPage extends Component {
 
         <div className="row">
           <div className="col-md-12">
+            <InputSpacer />
+
             <Button
               label={loading ? 'Loading...' : 'Import'}
-              disabled={saveDisabled}
+              loader={saveDisabled}
               onClick={this.onSaveImport}
               primary
             />
