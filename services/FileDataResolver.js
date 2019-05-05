@@ -2,10 +2,6 @@
 const request = require('request');
 const validateUrl = require('./utils/validateUrl');
 
-/*
- * Get the file data from the URL in the query.
- * This could eventually get data from an uploaded file or other source.
- */
 const getDataFromUrl = url => {
   return new Promise((resolve, reject) => {
     if (!validateUrl(url)) return reject('invalid URL');
@@ -22,9 +18,15 @@ const getDataFromUrl = url => {
 
 module.exports = {
   resolveFileDataFromRequest: ctx => {
-    const url = ctx.query.url;
+    const { source, url, data } = ctx.request.body;
 
-    return getDataFromUrl(url);
+    console.log({ source, url, data });
+
+    switch (source) {
+      case 'upload':
+      case 'url':
+        return getDataFromUrl(url);
+    }
   },
   getDataFromUrl
 };

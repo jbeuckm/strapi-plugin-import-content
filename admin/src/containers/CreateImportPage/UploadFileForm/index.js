@@ -8,7 +8,7 @@ function readFileContent(file) {
   const reader = new FileReader();
   return new Promise((resolve, reject) => {
     reader.onload = event => resolve(event.target.result);
-    reader.onerror = error => reject(error);
+    reader.onerror = reject;
     reader.readAsText(file);
   });
 }
@@ -22,14 +22,12 @@ export class UploadFileForm extends Component {
     const file = event.target.files[0];
 
     this.setState({ file });
-
-    readFileContent(file).then(console.log);
   };
 
-  clickAnalyzeUploadFile = () => {
-    this.props.onRequestAnalysis(
-      fetch({ method: 'post', url: '/import-content/preAnalyzeImportFile' })
-    );
+  clickAnalyzeUploadFile = async () => {
+    const data = await readFileContent(this.state.file);
+
+    this.props.onRequestAnalysis({ source: 'upload', data });
   };
 
   render() {

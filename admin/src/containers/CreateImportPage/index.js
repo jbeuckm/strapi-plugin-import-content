@@ -29,7 +29,7 @@ import saga from './saga';
 
 export class CreateImportPage extends Component {
   importSources = [
-    { label: 'External URL', value: 'url' },
+    { label: 'External URL ', value: 'url' },
     { label: 'Upload file', value: 'upload' }
   ];
 
@@ -37,7 +37,7 @@ export class CreateImportPage extends Component {
     super(props);
     this.state = {
       importSource: 'url',
-      url: null,
+      analysisConfig: null,
       analysis: null,
       loadingAnalysis: false,
       selectedName: null,
@@ -60,10 +60,17 @@ export class CreateImportPage extends Component {
     }
   }
 
-  onRequestAnalysis = async requestPromise => {
-    this.setState({ loadingAnalysis: true });
+  onRequestAnalysis = async analysisConfig => {
+    this.setState({ analysisConfig, loadingAnalysis: true });
+
     try {
-      const response = await requestPromise;
+      const response = await fetch('/import-content/preAnalyzeImportFile', {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(analysisConfig)
+      });
 
       const json = await response.json();
 
@@ -95,7 +102,7 @@ export class CreateImportPage extends Component {
 
   onSaveImport = () => {
     const importConfig = {
-      url: this.state.url,
+      ...this.state.analysisConfig,
       contentType: this.state.selectedName,
       fieldMapping: this.state.fieldMapping
     };
@@ -127,13 +134,33 @@ export class CreateImportPage extends Component {
 
         <div className="row">
           <div className="col-md-12">
-            <Label message="Import from..." />
-            <InputSelect
-              selectOptions={this.importSources}
-              value={importSource}
-              onChange={this.selectImportSource}
-            />
+            <table>
+              <tr>
+                <td style={{ minWidth: 200 }}>
+                  <Label message="Import from..." />
+                  <InputSelect
+                    selectOptions={this.importSources}
+                    value={importSource}
+                    onChange={this.selectImportSource}
+                  />
+                </td>
+                <td>
+                  {loading && <p>Loading content types...</p>}
+                  {models && (
+                    <Fragment>
+                      <Label message="Import to content of this type:" />
+                      <InputSelect
+                        selectOptions={models}
+                        onChange={this.selectContentType}
+                      />
+                    </Fragment>
+                  )}
+                </td>
+              </tr>
+            </table>
+
             <InputSpacer />
+
             {importSource === 'upload' && (
               <UploadFileForm
                 onRequestAnalysis={this.onRequestAnalysis}
@@ -155,32 +182,14 @@ export class CreateImportPage extends Component {
 
         <div className="row">
           <div className="col-md-12">
-            {loading && <p>Loading content types...</p>}
-            {models && (
-              <Fragment>
-                <span>Import to content of this type:</span>
-                <select onChange={this.selectContentType}>
-                  {models.map(model => (
-                    <option value={model.name}>{model.name}</option>
-                  ))}
-                </select>
-              </Fragment>
+            {analysis && (
+              <MappingTable
+                analysis={analysis}
+                targetModel={this.getTargetModel()}
+                onChange={this.setFieldMapping}
+              />
             )}
 
-            <InputSpacer />
-          </div>
-        </div>
-
-        {analysis && (
-          <MappingTable
-            analysis={analysis}
-            targetModel={this.getTargetModel()}
-            onChange={this.setFieldMapping}
-          />
-        )}
-
-        <div className="row">
-          <div className="col-md-12">
             <InputSpacer />
 
             <Button
