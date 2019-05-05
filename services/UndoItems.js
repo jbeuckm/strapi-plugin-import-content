@@ -1,27 +1,18 @@
 'use strict';
-const fileUtils = require('./utils/fileUtils');
 
 const queues = {};
 
 const UNDO_THROTTLE = 100;
 
-const removeImportedFiles = async fileIds => {
-  const config = await strapi
-    .store({
-      environment: strapi.config.environment,
-      type: 'plugin',
-      name: 'upload'
-    })
-    .get({ key: 'provider' });
-
+const removeImportedFiles = async (fileIds, uploadConfig) => {
   const removePromises = fileIds.map(id =>
-    strapi.plugins['upload'].services.upload.remove({ id }, config)
+    strapi.plugins['upload'].services.upload.remove({ id }, uploadConfig)
   );
 
   return await Promise.all(removePromises);
 };
 
-const undoNextItem = async importConfig => {
+const undoNextItem = async (importConfig, uploadConfig) => {
   const item = queues[importConfig.id].shift();
 
   if (!item) {
@@ -39,7 +30,7 @@ const undoNextItem = async importConfig => {
     .destroy();
 
   const importedFileIds = item.importedFiles.fileIds;
-  await removeImportedFiles(importedFileIds);
+  await removeImportedFiles(importedFileIds, uploadConfig);
 
   await strapi.query('importeditem', 'import-content').delete({
     id: item.id
@@ -66,6 +57,14 @@ module.exports = {
         importConfigId: importConfig.id
       });
 
-      undoNextItem(importConfig);
+      const uploadConfig = await strapi
+        .store({
+          environment: strapi.config.environment,
+          type: 'plugin',
+          name: 'upload'
+        })
+        .get({ key: 'provider' });
+
+      undoNextItem(importConfig, uploadConfig);
     })
 };
