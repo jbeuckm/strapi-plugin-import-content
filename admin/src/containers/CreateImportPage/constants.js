@@ -1,9 +1,3 @@
-/*
- *
- * ExamplePage constants
- *
- */
-
 import pluginId from 'pluginId';
 
 const buildString = suffix => `${pluginId}/CreateImportPage/${suffix}`;

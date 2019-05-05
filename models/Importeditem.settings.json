@@ -3,7 +3,8 @@
   "collectionName": "importeditems",
   "info": {
     "name": "importeditem",
-    "description": "A record of an item that has been imported with a given ImportConfig"
+    "description":
+      "A record of an item that has been imported with a given ImportConfig"
   },
   "options": {
     "increments": true,
@@ -21,6 +22,9 @@
       "model": "importconfig",
       "via": "importeditems",
       "plugin": "import-content"
+    },
+    "importedFiles": {
+      "type": "json"
     }
   }
 }

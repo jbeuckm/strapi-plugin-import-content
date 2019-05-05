@@ -4,7 +4,7 @@ const getUploadProvider = require('./getUploadProvider');
 const fileFromBuffer = require('./fileFromBuffer');
 const getMediaUrlsFromFieldData = require('./getMediaUrlsFromFieldData');
 
-const importMediaFile = url =>
+const fetchAndStoreFiles = url =>
   new Promise((resolve, reject) => {
     request({ url, method: 'GET', encoding: null }, async (err, res, body) => {
       if (err) {
@@ -33,33 +33,52 @@ const importMediaFile = url =>
     });
   });
 
+const relateFileToContent = async ({
+  contentType,
+  contentId,
+  targetField,
+  fileDescriptor
+}) => {
+  fileDescriptor.related = [
+    {
+      refId: contentId,
+      ref: contentType,
+      source: 'content-manager',
+      field: targetField
+    }
+  ];
+
+  return await strapi.plugins['upload'].services.upload.add(fileDescriptor);
+};
+
 const importMediaFiles = async (savedContent, sourceItem, importConfig) => {
   const { fieldMapping, contentType } = importConfig;
 
-  Object.keys(fieldMapping).forEach(async sourceField => {
-    const { importMediaToField } = fieldMapping[sourceField];
+  const uploadedFileDescriptors = _.mapValues(
+    fieldMapping,
+    async (mapping, sourceField) => {
+      if (mapping.importMediaToField) {
+        const urls = getMediaUrlsFromFieldData(sourceItem[sourceField]);
 
-    if (importMediaToField) {
-      const urls = getMediaUrlsFromFieldData(sourceItem[sourceField]);
+        const uploadPromises = _.uniq(urls).map(fetchAndStoreFiles);
 
-      const promises = _.uniq(urls).map(importMediaFile);
+        const fileDescriptors = await Promise.all(uploadPromises);
 
-      const fileDescriptors = await Promise.all(promises);
+        const relateContentPromises = fileDescriptors.map(fileDescriptor =>
+          relateFileToContent({
+            contentType,
+            contentId: savedContent.id,
+            targetField: mapping.importMediaToField,
+            fileDescriptor
+          })
+        );
 
-      return fileDescriptors.map(async fd => {
-        fd.related = [
-          {
-            refId: savedContent.id,
-            ref: contentType,
-            source: 'content-manager',
-            field: importMediaToField
-          }
-        ];
-
-        return await strapi.plugins['upload'].services.upload.add(fd);
-      });
+        return await Promise.all(relateContentPromises);
+      }
     }
-  });
+  );
+
+  return await Promise.all(_.values(uploadedFileDescriptors));
 };
 
 module.exports = importMediaFiles;

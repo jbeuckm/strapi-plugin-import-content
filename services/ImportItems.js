@@ -1,4 +1,5 @@
 'use strict';
+const _ = require('lodash');
 const fileUtils = require('./utils/fileUtils');
 const importFields = require('./utils/importFields');
 const importMediaFiles = require('./utils/importMediaFiles');
@@ -28,12 +29,18 @@ const importNextItem = async importConfig => {
     .forge(importedItem)
     .save();
 
-  await importMediaFiles(savedContent, sourceItem, importConfig);
+  const uploadedFiles = await importMediaFiles(
+    savedContent,
+    sourceItem,
+    importConfig
+  );
+  const fileIds = _.map(_.flatten(uploadedFiles), 'id');
 
   await strapi.query('importeditem', 'import-content').create({
     importconfig: importConfig.id,
     ContentId: savedContent.id,
-    ContentType: importConfig.contentType
+    ContentType: importConfig.contentType,
+    importedFiles: { fileIds }
   });
 
   setTimeout(() => importNextItem(importConfig), IMPORT_THROTTLE);

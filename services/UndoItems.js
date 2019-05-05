@@ -5,6 +5,22 @@ const queues = {};
 
 const UNDO_THROTTLE = 100;
 
+const removeImportedFiles = async fileIds => {
+  const config = await strapi
+    .store({
+      environment: strapi.config.environment,
+      type: 'plugin',
+      name: 'upload'
+    })
+    .get({ key: 'provider' });
+
+  const removePromises = fileIds.map(id =>
+    strapi.plugins['upload'].services.upload.remove({ id }, config)
+  );
+
+  return await Promise.all(removePromises);
+};
+
 const undoNextItem = async importConfig => {
   const item = queues[importConfig.id].shift();
 
@@ -21,6 +37,9 @@ const undoNextItem = async importConfig => {
   await strapi.models[importConfig.contentType]
     .forge({ id: item.ContentId })
     .destroy();
+
+  const importedFileIds = item.importedFiles.fileIds;
+  await removeImportedFiles(importedFileIds);
 
   await strapi.query('importeditem', 'import-content').delete({
     id: item.id
