@@ -31,7 +31,7 @@ module.exports = async () => {
   return {
     config: uploadProviderConfig,
     provider,
-    actions: provider.init(uploadProviderConfig),
+    actions: await provider.init(uploadProviderConfig),
     getPath
   };
 };

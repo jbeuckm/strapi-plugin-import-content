@@ -1,4 +1,5 @@
 'use strict';
+const _ = require('lodash');
 
 const queues = {};
 
@@ -29,14 +30,15 @@ const undoNextItem = async (importConfig, uploadConfig) => {
     .forge({ id: item.ContentId })
     .destroy();
 
-  const importedFileIds = item.importedFiles.fileIds;
+  const importedFileIds = _.compact(item.importedFiles.fileIds);
+
   await removeImportedFiles(importedFileIds, uploadConfig);
 
   await strapi.query('importeditem', 'import-content').delete({
     id: item.id
   });
 
-  setTimeout(() => undoNextItem(importConfig), UNDO_THROTTLE);
+  setTimeout(() => undoNextItem(importConfig, uploadConfig), UNDO_THROTTLE);
 };
 
 module.exports = {
