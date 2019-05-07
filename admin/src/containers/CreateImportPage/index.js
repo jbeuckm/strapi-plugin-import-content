@@ -14,6 +14,7 @@ import Label from 'components/Label';
 
 import ExternalUrlForm from './ExternalUrlForm';
 import UploadFileForm from './UploadFileForm';
+import InputFormatSettings from './InputFormatSettings';
 import MappingTable from '../../components/MappingTable';
 
 import styles from './styles.scss';
@@ -39,7 +40,8 @@ export class CreateImportPage extends Component {
     analysis: null,
     loadingAnalysis: false,
     selectedContentType: null,
-    fieldMapping: {}
+    fieldMapping: {},
+    inputFormatSettings: { delimiter: ',' }
   };
 
   componentDidMount() {
@@ -55,8 +57,23 @@ export class CreateImportPage extends Component {
     }
   }
 
+  getAnalysisConfigWithSettings = analysisConfig => {
+    const { inputFormatSettings } = this.state;
+    return {
+      ...analysisConfig,
+      options: {
+        ...analysisConfig.options,
+        ...inputFormatSettings
+      }
+    };
+  };
+
   onRequestAnalysis = async analysisConfig => {
     this.setState({ analysisConfig, loadingAnalysis: true });
+
+    const analysisConfigWithSettings = this.getAnalysisConfigWithSettings(
+      analysisConfig
+    );
 
     try {
       const response = await fetch('/import-content/preAnalyzeImportFile', {
@@ -64,7 +81,7 @@ export class CreateImportPage extends Component {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(analysisConfig)
+        body: JSON.stringify(analysisConfigWithSettings)
       });
 
       const json = await response.json();
@@ -97,8 +114,12 @@ export class CreateImportPage extends Component {
   };
 
   onSaveImport = () => {
+    const analysisConfigWithSettings = this.getAnalysisConfigWithSettings(
+      this.state.analysisConfig
+    );
+    console.log({ analysisConfigWithSettings });
     const importConfig = {
-      ...this.state.analysisConfig,
+      ...analysisConfigWithSettings,
       contentType: this.state.selectedContentType,
       fieldMapping: this.state.fieldMapping
     };
@@ -110,10 +131,15 @@ export class CreateImportPage extends Component {
     this.setState({ importSource: event.target.value, analysis: null });
   };
 
+  updateInputFormatSettings = newSettings => {
+    this.setState({ inputFormatSettings: newSettings });
+  };
+
   render() {
     const { models, loading, saving } = this.props;
     const {
       importSource,
+      inputFormatSettings,
       loadingAnalysis,
       analysis,
       fieldMapping
@@ -177,6 +203,13 @@ export class CreateImportPage extends Component {
                 loadingAnalysis={loadingAnalysis}
               />
             )}
+            <InputSpacer />
+
+            <InputFormatSettings
+              type={analysis && analysis.sourceType}
+              settings={inputFormatSettings}
+              onChange={this.updateInputFormatSettings}
+            />
 
             {loadingAnalysis && <p>Analyzing...</p>}
             <InputSpacer />

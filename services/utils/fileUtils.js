@@ -14,7 +14,10 @@ const getItemsForFileData = ({ contentType, body, options }) =>
     }
 
     if (contentType === 'text/csv') {
-      const items = parse(body, { ...options, columns: true });
+      const items = parse(body, {
+        ...options,
+        columns: true
+      });
       return resolve({ sourceType: 'csv', items });
     }
 

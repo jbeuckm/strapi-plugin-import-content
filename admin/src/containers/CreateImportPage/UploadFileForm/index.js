@@ -21,7 +21,6 @@ export class UploadFileForm extends Component {
     file: null,
     type: null,
     options: {
-      delimiter: ',',
       filename: null
     }
   };
@@ -62,37 +61,27 @@ export class UploadFileForm extends Component {
 
   render() {
     const { loadingAnalysis } = this.props;
-    const { type, options } = this.state;
 
     return (
-      <Fragment>
-        <input type="file" accept=".csv" onChange={this.onChangeImportFile} />
-        <InputSpacer />
-        <div>
-          {type === 'text/csv' && (
-            <Fragment>
-              <Label message="delimiter:" />
-              <input
-                onChange={this.onChangeOption('delimiter')}
-                value={options.delimiter}
-                style={{
-                  backgroundColor: '#fff',
-                  marginLeft: 10,
-                  width: 30,
-                  paddingLeft: 7,
-                  paddingRight: 7
-                }}
-              />
-            </Fragment>
-          )}
-          <Button
-            label={'Analyze'}
-            onClick={this.clickAnalyzeUploadFile}
-            secondaryHotline
-            loading={loadingAnalysis}
-          />
-        </div>
-      </Fragment>
+      <table>
+        <tr>
+          <td>
+            <input
+              type="file"
+              accept=".csv"
+              onChange={this.onChangeImportFile}
+            />
+          </td>
+          <td>
+            <Button
+              label={'Analyze'}
+              onClick={this.clickAnalyzeUploadFile}
+              secondaryHotline
+              loading={loadingAnalysis}
+            />
+          </td>
+        </tr>
+      </table>
     );
   }
 }
