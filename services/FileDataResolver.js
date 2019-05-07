@@ -16,20 +16,27 @@ const getDataFromUrl = url => {
   });
 };
 
+const resolveFileDataFromRequest = async ctx => {
+  const { source, type, options, data } = ctx.request.body;
+
+  switch (source) {
+    case 'upload':
+      return { contentType: type, body: data, options };
+
+    case 'url':
+      const { contentType, body } = await getDataFromUrl(options.url);
+      return { contentType, body, options };
+
+    case 'raw':
+      return {
+        contentType: type,
+        body: options.rawText,
+        options
+      };
+  }
+};
+
 module.exports = {
-  resolveFileDataFromRequest: async ctx => {
-    const { source, type, options, data } = ctx.request.body;
-
-    console.log({ source, options, type, data });
-
-    switch (source) {
-      case 'upload':
-        return { contentType: type, body: data, options };
-
-      case 'url':
-        const { contentType, body } = await getDataFromUrl(options.url);
-        return { contentType, body, options };
-    }
-  },
+  resolveFileDataFromRequest,
   getDataFromUrl
 };

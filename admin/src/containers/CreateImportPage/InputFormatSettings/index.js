@@ -27,6 +27,14 @@ export class InputFormatSettings extends Component {
               onChange={this.onChangeOption('delimiter')}
               value={settings.delimiter}
             />
+            <Label message="skip rows:" />
+            <input
+              type="number"
+              min="0"
+              className={styles.settingsInputField}
+              onChange={this.onChangeOption('skipRows')}
+              value={settings.skipRows}
+            />
           </Fragment>
         )}
       </div>

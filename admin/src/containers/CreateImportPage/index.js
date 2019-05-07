@@ -14,6 +14,7 @@ import Label from 'components/Label';
 
 import ExternalUrlForm from './ExternalUrlForm';
 import UploadFileForm from './UploadFileForm';
+import RawInputForm from './RawInputForm';
 import InputFormatSettings from './InputFormatSettings';
 import MappingTable from '../../components/MappingTable';
 
@@ -31,7 +32,8 @@ import saga from './saga';
 export class CreateImportPage extends Component {
   importSources = [
     { label: 'External URL ', value: 'url' },
-    { label: 'Upload file', value: 'upload' }
+    { label: 'Upload file', value: 'upload' },
+    { label: 'Raw text', value: 'raw' }
   ];
 
   state = {
@@ -41,7 +43,7 @@ export class CreateImportPage extends Component {
     loadingAnalysis: false,
     selectedContentType: null,
     fieldMapping: {},
-    inputFormatSettings: { delimiter: ',' }
+    inputFormatSettings: { delimiter: ',', skipRows: 0 }
   };
 
   componentDidMount() {
@@ -117,7 +119,7 @@ export class CreateImportPage extends Component {
     const analysisConfigWithSettings = this.getAnalysisConfigWithSettings(
       this.state.analysisConfig
     );
-    console.log({ analysisConfigWithSettings });
+
     const importConfig = {
       ...analysisConfigWithSettings,
       contentType: this.state.selectedContentType,
@@ -156,10 +158,7 @@ export class CreateImportPage extends Component {
 
     return (
       <div className={styles.createImportPage}>
-        <PluginHeader
-          title={'Import Content'}
-          description={'Import content from an RSS feed.'}
-        />
+        <PluginHeader title={'Import Content'} />
 
         <div className="row">
           <div className="col-md-12">
@@ -199,6 +198,13 @@ export class CreateImportPage extends Component {
 
             {importSource === 'url' && (
               <ExternalUrlForm
+                onRequestAnalysis={this.onRequestAnalysis}
+                loadingAnalysis={loadingAnalysis}
+              />
+            )}
+
+            {importSource === 'raw' && (
+              <RawInputForm
                 onRequestAnalysis={this.onRequestAnalysis}
                 loadingAnalysis={loadingAnalysis}
               />

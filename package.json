@@ -35,6 +35,7 @@
     "joi": "^14.3.1",
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
+    "nock": "^10.0.6",
     "request": "^2.88.0",
     "rss-parser": "^3.7.0",
     "simple-statistics": "^7.0.2",

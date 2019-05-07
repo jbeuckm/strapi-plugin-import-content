@@ -28,8 +28,6 @@ export class UploadFileForm extends Component {
   onChangeImportFile = event => {
     const file = event.target.files[0];
 
-    console.log({ file });
-
     this.setState({
       file,
       type: file.type,
