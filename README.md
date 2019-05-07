@@ -2,7 +2,7 @@
 
 Import RSS items to your content type with Strapi.
 
-[![Build Status](https://dev.azure.com/joebeuckman0156/strapi-plugin-import-content/_apis/build/status/jbeuckm.strapi-plugin-import-content?branchName=master)](https://dev.azure.com/joebeuckman0156/strapi-plugin-import-content/_build/latest?definitionId=1&branchName=master)
+[![Build Status](https://dev.azure.com/joebeuckman0156/Strapi%20Plugins/_apis/build/status/jbeuckm.strapi-plugin-import-content?branchName=master)](https://dev.azure.com/joebeuckman0156/Strapi%20Plugins/_build/latest?definitionId=1&branchName=master)
 
 ### Installation
 
