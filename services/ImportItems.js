@@ -6,8 +6,6 @@ const importMediaFiles = require('./utils/importMediaFiles');
 
 const queues = {};
 
-const IMPORT_THROTTLE = 100;
-
 const importNextItem = async importConfig => {
   const sourceItem = queues[importConfig.id].shift();
   if (!sourceItem) {
@@ -43,6 +41,7 @@ const importNextItem = async importConfig => {
     importedFiles: { fileIds }
   });
 
+  const { IMPORT_THROTTLE } = strapi.plugins['import-content'].config;
   setTimeout(() => importNextItem(importConfig), IMPORT_THROTTLE);
 };
 

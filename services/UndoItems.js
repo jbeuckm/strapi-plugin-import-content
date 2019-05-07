@@ -3,8 +3,6 @@ const _ = require('lodash');
 
 const queues = {};
 
-const UNDO_THROTTLE = 100;
-
 const removeImportedFiles = async (fileIds, uploadConfig) => {
   const removePromises = fileIds.map(id =>
     strapi.plugins['upload'].services.upload.remove({ id }, uploadConfig)
@@ -38,6 +36,7 @@ const undoNextItem = async (importConfig, uploadConfig) => {
     id: item.id
   });
 
+  const { UNDO_THROTTLE } = strapi.plugins['import-content'].config;
   setTimeout(() => undoNextItem(importConfig, uploadConfig), UNDO_THROTTLE);
 };
 
