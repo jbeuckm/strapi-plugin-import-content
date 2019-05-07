@@ -1,6 +1,6 @@
 'use strict';
 const request = require('request');
-const validateUrl = require('./utils/validateUrl');
+const validateUrl = require('./validateUrl');
 
 const getDataFromUrl = url => {
   return new Promise((resolve, reject) => {

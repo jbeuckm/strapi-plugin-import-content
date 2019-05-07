@@ -1,4 +1,7 @@
 'use strict';
+const {
+  resolveFileDataFromRequest
+} = require('../services/utils/FileDataResolver');
 
 module.exports = {
   index: async ctx => {
@@ -25,9 +28,7 @@ module.exports = {
 
     ctx.send(record);
 
-    const { contentType, body } = await services[
-      'filedataresolver'
-    ].resolveFileDataFromRequest(ctx);
+    const { contentType, body } = await resolveFileDataFromRequest(ctx);
 
     services['importitems'].importItems(record, { contentType, body });
   },
@@ -61,9 +62,9 @@ module.exports = {
   preAnalyzeImportFile: async ctx => {
     const services = strapi.plugins['import-content'].services;
 
-    const { contentType, body, options } = await services[
-      'filedataresolver'
-    ].resolveFileDataFromRequest(ctx);
+    const { contentType, body, options } = await resolveFileDataFromRequest(
+      ctx
+    );
 
     try {
       const data = await services['importconfig'].preAnalyzeImportFile({
