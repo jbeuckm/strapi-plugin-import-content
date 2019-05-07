@@ -33,27 +33,28 @@ export class CreateImportPage extends Component {
     { label: 'Upload file', value: 'upload' }
   ];
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      importSource: 'url',
-      analysisConfig: null,
-      analysis: null,
-      loadingAnalysis: false,
-      selectedName: null,
-      fieldMapping: {}
-    };
-
-    props.loadModels();
-  }
+  state = {
+    importSource: 'url',
+    analysisConfig: null,
+    analysis: null,
+    loadingAnalysis: false,
+    selectedContentType: null,
+    fieldMapping: {}
+  };
 
   componentDidMount() {
-    this.setState({ fieldMapping: {} });
+    this.props.loadModels();
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.models && !this.state.selectedName) {
-      this.setState({ selectedName: nextProps.models[0].name });
+    if (nextProps.models && !this.props.models) {
+      this.modelOptions = nextProps.models.map(({ name }) => ({
+        label: name,
+        value: name
+      }));
+    }
+    if (nextProps.models && !this.state.selectedContentType) {
+      this.setState({ selectedContentType: nextProps.models[0].name });
     }
     if (!this.props.created && nextProps.created) {
       this.props.history.push(`/plugins/${pluginId}`);
@@ -85,15 +86,16 @@ export class CreateImportPage extends Component {
   };
 
   selectContentType = event => {
-    const selectedName = event.target.value;
-    this.setState({ selectedName });
+    const selectedContentType = event.target.value;
+
+    this.setState({ selectedContentType });
   };
 
   getTargetModel = () => {
     const { models } = this.props;
     if (!models) return null;
 
-    return models.find(model => model.name === this.state.selectedName);
+    return models.find(model => model.name === this.state.selectedContentType);
   };
 
   setFieldMapping = fieldMapping => {
@@ -103,7 +105,7 @@ export class CreateImportPage extends Component {
   onSaveImport = () => {
     const importConfig = {
       ...this.state.analysisConfig,
-      contentType: this.state.selectedName,
+      contentType: this.state.selectedContentType,
       fieldMapping: this.state.fieldMapping
     };
 
@@ -115,7 +117,7 @@ export class CreateImportPage extends Component {
   };
 
   render() {
-    const { models, loading, saving } = this.props;
+    const { loading, saving } = this.props;
     const {
       importSource,
       loadingAnalysis,
@@ -146,11 +148,11 @@ export class CreateImportPage extends Component {
                 </td>
                 <td>
                   {loading && <p>Loading content types...</p>}
-                  {models && (
+                  {this.modelOptions && (
                     <Fragment>
                       <Label message="Import to content of this type:" />
                       <InputSelect
-                        selectOptions={models}
+                        selectOptions={this.modelOptions}
                         onChange={this.selectContentType}
                       />
                     </Fragment>
