@@ -47,12 +47,6 @@ export class CreateImportPage extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.models && !this.props.models) {
-      this.modelOptions = nextProps.models.map(({ name }) => ({
-        label: name,
-        value: name
-      }));
-    }
     if (nextProps.models && !this.state.selectedContentType) {
       this.setState({ selectedContentType: nextProps.models[0].name });
     }
@@ -117,7 +111,7 @@ export class CreateImportPage extends Component {
   };
 
   render() {
-    const { loading, saving } = this.props;
+    const { models, loading, saving } = this.props;
     const {
       importSource,
       loadingAnalysis,
@@ -126,6 +120,13 @@ export class CreateImportPage extends Component {
     } = this.state;
 
     const saveDisabled = loading || saving || fieldMapping === {};
+
+    const modelOptions =
+      models &&
+      models.map(({ name }) => ({
+        label: name,
+        value: name
+      }));
 
     return (
       <div className={styles.createImportPage}>
@@ -148,11 +149,11 @@ export class CreateImportPage extends Component {
                 </td>
                 <td>
                   {loading && <p>Loading content types...</p>}
-                  {this.modelOptions && (
+                  {modelOptions && (
                     <Fragment>
                       <Label message="Import to content of this type:" />
                       <InputSelect
-                        selectOptions={this.modelOptions}
+                        selectOptions={modelOptions}
                         onChange={this.selectContentType}
                       />
                     </Fragment>
