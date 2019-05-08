@@ -1,5 +1,5 @@
-import { createSelector } from 'reselect';
-import pluginId from 'pluginId';
+import { createSelector } from "reselect";
+import pluginId from "pluginId";
 
 /**
  * Direct selector to the examplePage state domain
@@ -12,28 +12,43 @@ const selectCreateImportPageDomain = () => state =>
  */
 
 const makeSelectLoading = () =>
-  createSelector(selectCreateImportPageDomain(), substate =>
-    substate.get('loading')
+  createSelector(
+    selectCreateImportPageDomain(),
+    substate => substate.get("loading")
+  );
+const makeSelectModels = () =>
+  createSelector(
+    selectCreateImportPageDomain(),
+    substate => substate.get("models")
   );
 
-const makeSelectModels = () =>
-  createSelector(selectCreateImportPageDomain(), substate =>
-    substate.get('models')
+const makeSelectAnalyzing = () =>
+  createSelector(
+    selectCreateImportPageDomain(),
+    substate => substate.get("analyzing")
+  );
+const makeSelectAnalysis = () =>
+  createSelector(
+    selectCreateImportPageDomain(),
+    substate => substate.get("analysis")
   );
 
 const makeSelectCreated = () =>
-  createSelector(selectCreateImportPageDomain(), substate =>
-    substate.get('created')
+  createSelector(
+    selectCreateImportPageDomain(),
+    substate => substate.get("created")
   );
-
 const makeSelectSaving = () =>
-  createSelector(selectCreateImportPageDomain(), substate =>
-    substate.get('saving')
+  createSelector(
+    selectCreateImportPageDomain(),
+    substate => substate.get("saving")
   );
 
 export {
   makeSelectLoading,
   makeSelectModels,
+  makeSelectAnalyzing,
+  makeSelectAnalysis,
   makeSelectCreated,
   makeSelectSaving
 };
