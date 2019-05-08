@@ -5,7 +5,7 @@
       "path": "/preAnalyzeImportFile",
       "handler": "ImportConfig.preAnalyzeImportFile",
       "config": {
-        "policies": ["global.isAuthenticated"]
+        "policies": []
       }
     },
     {
@@ -13,7 +13,7 @@
       "path": "/",
       "handler": "ImportConfig.create",
       "config": {
-        "policies": ["global.isAuthenticated"]
+        "policies": []
       }
     },
     {
@@ -21,7 +21,7 @@
       "path": "/",
       "handler": "ImportConfig.index",
       "config": {
-        "policies": ["global.isAuthenticated"]
+        "policies": []
       }
     },
     {
@@ -29,7 +29,7 @@
       "path": "/:importId/undo",
       "handler": "ImportConfig.undo",
       "config": {
-        "policies": ["global.isAuthenticated"]
+        "policies": []
       }
     },
     {
@@ -37,7 +37,7 @@
       "path": "/:importId",
       "handler": "ImportConfig.delete",
       "config": {
-        "policies": ["global.isAuthenticated"]
+        "policies": []
       }
     }
   ]
