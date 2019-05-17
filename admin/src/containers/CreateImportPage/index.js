@@ -1,25 +1,25 @@
-import React, { Component, Fragment } from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import { createStructuredSelector } from "reselect";
-import { injectIntl } from "react-intl";
-import { compose } from "redux";
-import pluginId from "pluginId";
+import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+import { injectIntl } from 'react-intl';
+import { compose } from 'redux';
+import pluginId from 'pluginId';
 
-import Button from "components/Button";
-import PluginHeader from "components/PluginHeader";
-import InputSelect from "components/InputSelect";
-import InputSpacer from "components/InputSpacer";
-import Label from "components/Label";
+import Button from 'components/Button';
+import PluginHeader from 'components/PluginHeader';
+import InputSelect from 'components/InputSelect';
+import InputSpacer from 'components/InputSpacer';
+import Label from 'components/Label';
 
-import ExternalUrlForm from "./ExternalUrlForm";
-import UploadFileForm from "./UploadFileForm";
-import RawInputForm from "./RawInputForm";
-import InputFormatSettings from "./InputFormatSettings";
-import MappingTable from "../../components/MappingTable";
+import ExternalUrlForm from './ExternalUrlForm';
+import UploadFileForm from './UploadFileForm';
+import RawInputForm from './RawInputForm';
+import InputFormatSettings from './InputFormatSettings';
+import MappingTable from '../../components/MappingTable';
 
-import styles from "./styles.scss";
-import { loadModels, preAnalyze, saveImportConfig } from "./actions";
+import styles from './styles.scss';
+import { loadModels, preAnalyze, saveImportConfig } from './actions';
 import {
   makeSelectLoading,
   makeSelectModels,
@@ -27,23 +27,23 @@ import {
   makeSelectAnalysis,
   makeSelectCreated,
   makeSelectSaving
-} from "./selectors";
-import reducer from "./reducer";
-import saga from "./saga";
+} from './selectors';
+import reducer from './reducer';
+import saga from './saga';
 
 export class CreateImportPage extends Component {
   importSources = [
-    { label: "External URL ", value: "url" },
-    { label: "Upload file", value: "upload" },
-    { label: "Raw text", value: "raw" }
+    { label: 'External URL ', value: 'url' },
+    { label: 'Upload file', value: 'upload' },
+    { label: 'Raw text', value: 'raw' }
   ];
 
   state = {
-    importSource: "url",
+    importSource: 'url',
     analysisConfig: null,
     selectedContentType: null,
     fieldMapping: {},
-    inputFormatSettings: { delimiter: ",", skipRows: 0 }
+    inputFormatSettings: { delimiter: ',', skipRows: 0 }
   };
 
   componentDidMount() {
@@ -61,6 +61,7 @@ export class CreateImportPage extends Component {
 
   getAnalysisConfigWithSettings = analysisConfig => {
     const { inputFormatSettings } = this.state;
+
     return {
       ...analysisConfig,
       options: {
@@ -71,6 +72,8 @@ export class CreateImportPage extends Component {
   };
 
   onRequestAnalysis = async analysisConfig => {
+    this.analysisConfig = analysisConfig;
+
     const analysisConfigWithSettings = this.getAnalysisConfigWithSettings(
       analysisConfig
     );
@@ -96,14 +99,17 @@ export class CreateImportPage extends Component {
   };
 
   onSaveImport = () => {
+    const { selectedContentType, fieldMapping } = this.state;
+    const { analysisConfig } = this;
+
     const analysisConfigWithSettings = this.getAnalysisConfigWithSettings(
-      this.state.analysisConfig
+      analysisConfig
     );
 
     const importConfig = {
       ...analysisConfigWithSettings,
-      contentType: this.state.selectedContentType,
-      fieldMapping: this.state.fieldMapping
+      contentType: selectedContentType,
+      fieldMapping
     };
 
     this.props.saveImportConfig(importConfig);
@@ -133,7 +139,7 @@ export class CreateImportPage extends Component {
 
     return (
       <div className={styles.createImportPage}>
-        <PluginHeader title={"Import Content"} />
+        <PluginHeader title={'Import Content'} />
 
         <div className="row">
           <div className="col-md-12">
@@ -164,21 +170,21 @@ export class CreateImportPage extends Component {
 
             <InputSpacer />
 
-            {importSource === "upload" && (
+            {importSource === 'upload' && (
               <UploadFileForm
                 onRequestAnalysis={this.onRequestAnalysis}
                 loadingAnalysis={loadingAnalysis}
               />
             )}
 
-            {importSource === "url" && (
+            {importSource === 'url' && (
               <ExternalUrlForm
                 onRequestAnalysis={this.onRequestAnalysis}
                 loadingAnalysis={loadingAnalysis}
               />
             )}
 
-            {importSource === "raw" && (
+            {importSource === 'raw' && (
               <RawInputForm
                 onRequestAnalysis={this.onRequestAnalysis}
                 loadingAnalysis={loadingAnalysis}
@@ -210,7 +216,7 @@ export class CreateImportPage extends Component {
             <InputSpacer />
 
             <Button
-              label={loading ? "Loading..." : "Import"}
+              label={loading ? 'Loading...' : 'Import'}
               loader={saveDisabled}
               onClick={this.onSaveImport}
               primary
@@ -256,12 +262,12 @@ const withConnect = connect(
 );
 
 const withReducer = strapi.injectReducer({
-  key: "createImportPage",
+  key: 'createImportPage',
   reducer,
   pluginId
 });
 
-const withSaga = strapi.injectSaga({ key: "createImportPage", saga, pluginId });
+const withSaga = strapi.injectSaga({ key: 'createImportPage', saga, pluginId });
 
 export default compose(
   withReducer,
