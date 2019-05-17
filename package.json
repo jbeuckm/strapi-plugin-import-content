@@ -1,7 +1,7 @@
 {
   "name": "strapi-plugin-import-content",
-  "version": "0.3.3",
-  "description": "Import RSS etc. into Strapi.",
+  "version": "0.3.4",
+  "description": "Import your content into Strapi.",
   "repository": {
     "type": "git",
     "url": "git@github.com:jbeuckm/strapi-plugin-import-content.git"
@@ -9,7 +9,7 @@
   "strapi": {
     "name": "Import Content",
     "icon": "plug",
-    "description": "Import RSS etc. into Strapi."
+    "description": "Import RSS feed or uploaded CSV data into Strapi."
   },
   "scripts": {
     "analyze:clean": "node ./node_modules/strapi-helper-plugin/node_modules/.bin/rimraf stats.json",
