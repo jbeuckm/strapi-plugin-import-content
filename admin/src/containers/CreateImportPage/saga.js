@@ -1,5 +1,5 @@
 import { fork, takeLatest, call, put } from "redux-saga/effects";
-import request from "utils/request";
+import { request } from "strapi-helper-plugin";
 
 import {
   loadModelsSuccess,
@@ -13,7 +13,8 @@ import { LOAD_MODELS, PRE_ANALYZE, SAVE_IMPORT_CONFIG } from "./constants";
 
 export function* loadModels() {
   try {
-    const { allModels } = yield call(request, "/content-type-builder/models", {
+    console.log(strapi.models)
+    const { allModels } = yield call(request, "/content-manager/content-types", {
       method: "GET"
     });
 

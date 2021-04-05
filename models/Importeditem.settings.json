@@ -15,7 +15,7 @@
       "type": "string"
     },
     "ContentId": {
-      "type": "integer"
+      "type": "string"
     },
     "importconfig": {
       "model": "importconfig",

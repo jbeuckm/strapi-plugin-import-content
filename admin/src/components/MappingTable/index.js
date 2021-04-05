@@ -8,8 +8,6 @@ class MappingTable extends Component {
   state = { mapping: {} };
 
   changeMappingOptions = stat => options => {
-    console.log(stat, options);
-
     let newState = _.cloneDeep(this.state);
     for (let key in options) {
       _.set(newState, `mapping[${stat.fieldName}][${key}]`, options[key]);

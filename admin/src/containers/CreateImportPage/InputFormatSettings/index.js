@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
 import _ from 'lodash';
 
-import Label from 'components/Label';
-import styles from './styles.scss';
+import { Label } from 'strapi-helper-plugin';
+import styles from './styles.css';
 
 export class InputFormatSettings extends Component {
   onChangeOption = option => event => {

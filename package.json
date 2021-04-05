@@ -39,11 +39,11 @@
     "request": "^2.88.0",
     "rss-parser": "^3.7.0",
     "simple-statistics": "^7.0.2",
+    "strapi-helper-plugin": "^3.5.4",
+    "strapi-provider-upload-local": "^3.5.4",
     "striptags": "^3.1.1"
   },
-  "devDependencies": {
-    "strapi-helper-plugin": "3.0.0-alpha.26"
-  },
+  "devDependencies": {},
   "author": {
     "name": "Joseph Beuckman",
     "email": "joe@beigerecords.com",
@@ -57,8 +57,8 @@
     }
   ],
   "engines": {
-    "node": ">= 10.0.0",
-    "npm": ">= 6.0.0"
+    "node": ">=10.16.0 <=14.x.x",
+    "npm": ">=6.0.0"
   },
   "license": "MIT"
 }

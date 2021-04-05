@@ -12,14 +12,14 @@ const removeImportedFiles = async (fileIds, uploadConfig) => {
 };
 
 const undoNextItem = async (importConfig, uploadConfig) => {
-  const item = queues[importConfig.id].shift();
+  const item = queues[importConfig._id].shift();
 
   if (!item) {
     console.log('undo complete');
 
     await strapi
       .query('importconfig', 'import-content')
-      .update({ id: importConfig.id }, { ongoing: false });
+      .update({ id: importConfig._id }, { ongoing: false });
 
     return;
   }
@@ -33,7 +33,7 @@ const undoNextItem = async (importConfig, uploadConfig) => {
   await removeImportedFiles(importedFileIds, uploadConfig);
 
   await strapi.query('importeditem', 'import-content').delete({
-    id: item.id
+    id: item._id
   });
 
   const { UNDO_THROTTLE } = strapi.plugins['import-content'].config;
@@ -44,18 +44,18 @@ module.exports = {
   undoItems: importConfig =>
     new Promise(async (resolve, reject) => {
       try {
-        queues[importConfig.id] = importConfig.importeditems;
+        queues[importConfig._id] = importConfig.importeditems;
       } catch (error) {
         reject(error);
       }
 
       await strapi
         .query('importconfig', 'import-content')
-        .update({ id: importConfig.id }, { ongoing: true });
+        .update({ id: importConfig._id }, { ongoing: true });
 
       resolve({
         status: 'undo started',
-        importConfigId: importConfig.id
+        importConfigId: importConfig._id
       });
 
       const uploadConfig = await strapi

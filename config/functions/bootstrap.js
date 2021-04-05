@@ -8,7 +8,7 @@ const resetOngoingImports = async () => {
   const resetImportsPromises = entries.map(importConfig =>
     strapi
       .query('importconfig', 'import-content')
-      .update({ id: importConfig.id }, { ongoing: false })
+      .update({ id: importConfig._id }, { ongoing: false })
   );
 
   return await Promise.all(resetImportsPromises);
@@ -18,7 +18,6 @@ const findAuthenticatedRole = async () => {
   const result = await strapi
     .query('role', 'users-permissions')
     .findOne({ type: 'authenticated' });
-
   return result;
 };
 
@@ -27,7 +26,7 @@ const setDefaultPermissions = async () => {
 
   const permissions = await strapi
     .query('permission', 'users-permissions')
-    .find({ type: 'import-content', role: role.id });
+    .find({ type: 'import-content', role: role && role.id });
 
   await Promise.all(
     permissions.map(p =>
@@ -61,5 +60,5 @@ module.exports = async callback => {
 
   await resetOngoingImports();
 
-  callback();
+  callback && callback();
 };
