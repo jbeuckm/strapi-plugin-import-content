@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
-import Button from 'components/Button';
-import IcoContainer from 'components/IcoContainer';
+import { Button, IcoContainer } from 'strapi-helper-plugin';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { injectIntl } from 'react-intl';
 import { compose } from 'redux';
-import pluginId from 'pluginId';
+import pluginId from '../../pluginId';
 import moment from 'moment';
 
 import {
@@ -15,7 +14,7 @@ import {
   selectImportConfigsLoading
 } from './selectors';
 
-import styles from './styles.scss';
+import styles from './styles.css';
 
 import { loadImportConfigs, undoImport, deleteImport } from './actions';
 import reducer from './reducer';
@@ -97,12 +96,12 @@ export class HomePage extends Component {
                               ? { icoType: 'spinner' }
                               : {
                                 icoType: 'undo',
-                                onClick: this.undoImport(item.id)
+                                onClick: this.undoImport(item._id)
                               }
                           ],
                           {
                             icoType: 'trash',
-                            onClick: this.deleteImport(item.id)
+                            onClick: this.deleteImport(item._id)
                           }
                         ]}
                       />

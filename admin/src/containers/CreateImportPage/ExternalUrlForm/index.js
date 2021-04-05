@@ -1,9 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
-import Label from 'components/Label';
+import { Label } from 'strapi-helper-plugin';
 
-import styles from './styles.scss';
+import styles from './styles.css';
 
 export class ExternalUrlForm extends Component {
   state = {

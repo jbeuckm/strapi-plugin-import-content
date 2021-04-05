@@ -12,11 +12,11 @@ import { createStructuredSelector } from 'reselect';
 import { Switch, Route } from 'react-router-dom';
 import { compose } from 'redux';
 
-import pluginId from 'pluginId';
+import pluginId from '../../pluginId';
 
-import HomePage from 'containers/HomePage';
-import NotFoundPage from 'containers/NotFoundPage';
-import CreateImportPage from 'containers/CreateImportPage';
+import HomePage from '../HomePage';
+import NotFoundPage from '../NotFoundPage';
+import CreateImportPage from '../CreateImportPage';
 
 import reducer from './reducer';
 

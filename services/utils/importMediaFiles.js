@@ -67,7 +67,7 @@ const importMediaFiles = async (savedContent, sourceItem, importConfig) => {
         const relateContentPromises = fileDescriptors.map(fileDescriptor =>
           relateFileToContent({
             contentType,
-            contentId: savedContent.id,
+            contentId: savedContent._id,
             targetField: mapping.importMediaToField,
             fileDescriptor
           })

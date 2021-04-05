@@ -7,13 +7,13 @@ const importMediaFiles = require('./utils/importMediaFiles');
 const queues = {};
 
 const importNextItem = async importConfig => {
-  const sourceItem = queues[importConfig.id].shift();
+  const sourceItem = queues[importConfig._id].shift();
   if (!sourceItem) {
     console.log('import complete');
 
     await strapi
       .query('importconfig', 'import-content')
-      .update({ id: importConfig.id }, { ongoing: false });
+      .update({ id: importConfig._id }, { ongoing: false });
 
     return;
   }
@@ -35,8 +35,8 @@ const importNextItem = async importConfig => {
   const fileIds = _.map(_.flatten(uploadedFiles), 'id');
 
   await strapi.query('importeditem', 'import-content').create({
-    importconfig: importConfig.id,
-    ContentId: savedContent.id,
+    importconfig: importConfig._id,
+    ContentId: savedContent._id,
     ContentType: importConfig.contentType,
     importedFiles: { fileIds }
   });

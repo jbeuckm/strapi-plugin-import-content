@@ -1,13 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
-import Label from 'components/Label';
-import InputTextArea from 'components/InputTextArea';
-import InputSelect from 'components/InputSelect';
-import Button from 'components/Button';
-import InputSpacer from 'components/InputSpacer';
+import { Label, InputTextArea, InputSelect, Button, InputSpacer } from 'strapi-helper-plugin';
 
-import styles from './styles.scss';
+import styles from './styles.css';
 
 export class RawInputForm extends Component {
   state = {

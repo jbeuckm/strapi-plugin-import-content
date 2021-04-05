@@ -2,9 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
 
-import Button from 'components/Button';
-import Label from 'components/Label';
-import InputSpacer from 'components/InputSpacer';
+import { Button, Label, InputSpacer } from 'strapi-helper-plugin';
 
 function readFileContent(file) {
   const reader = new FileReader();

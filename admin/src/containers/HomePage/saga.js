@@ -1,5 +1,5 @@
 import { fork, takeLatest, call, put } from "redux-saga/effects";
-import request from "utils/request";
+import { request } from "strapi-helper-plugin";
 
 import {
   loadImportConfigs,
