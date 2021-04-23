@@ -7,10 +7,11 @@ Import RSS items to your content type with Strapi.
 ### Installation
 
 ```
-cd my-strapi-project/plugins
+cd my-strapi-project
+cd .cache
+cd plugins 
 git clone https://github.com/jbeuckm/strapi-plugin-import-content.git import-content
 cd import-content && npm install
-cd ../..
 npm run setup --plugins
 ```
 
